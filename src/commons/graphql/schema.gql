@@ -1,0 +1,32 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserResponse {
+  id: String!
+  email: String!
+  nickname: String!
+  iconImageUrl: String
+}
+
+type CreateResponse {
+  id: String!
+}
+
+type Query {
+  getUser(input: UserRequest!): UserResponse!
+}
+
+input UserRequest {
+  id: String!
+}
+
+type Mutation {
+  createUser(input: CreateUserRequest!): CreateResponse!
+}
+
+input CreateUserRequest {
+  email: String!
+  password: String!
+  nickname: String!
+}
