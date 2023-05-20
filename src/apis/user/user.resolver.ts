@@ -15,7 +15,7 @@ export class UserResolver {
 
   @Query(() => UserResponse)
   async getUser(@Args('input') request: UserRequest) {
-    const user = await this.userService.getUser(request.id);
+    const user = await this.userService.getUserById(request.id);
     return UserResponse.fromUser(user)
   }
 

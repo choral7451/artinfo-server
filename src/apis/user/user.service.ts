@@ -9,7 +9,7 @@ export class UserService {
     private readonly prismaService: PrismaService
   ) {}
 
-   async getUser(userId: string): Promise<User> {
+   async getUserById(userId: string): Promise<User> {
     const user = await this.prismaService.user.findFirst({
       where: {id: userId}
     })
@@ -20,6 +20,18 @@ export class UserService {
 
     return user
    }
+
+ async getUserByEmail(email: string): Promise<User> {
+  const user = await this.prismaService.user.findFirst({
+   where: { email }
+  })
+
+  if(!user) {
+   throw new Error('THE_USER_DOES_NOT_EXIST');
+  }
+
+  return user
+ }
 
    async createUser(fields: CreateUserFields): Promise<string> {
     fields.password = await this.getHashedPassword(fields.password);

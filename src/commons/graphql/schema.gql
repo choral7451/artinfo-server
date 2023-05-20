@@ -13,8 +13,36 @@ type CreateResponse {
   id: String!
 }
 
+type TokensResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type IssueResponse {
+  id: String!
+  type: IssueType!
+  title: String!
+  contents: String!
+  authorNickname: String!
+  authorIconImageUrl: String
+  countOfViews: Int!
+  createdAt: DateTime!
+}
+
+enum IssueType {
+  FREE
+  ISSUE
+  POSTSCRIPT
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
   getUser(input: UserRequest!): UserResponse!
+  getIssue: IssueResponse!
 }
 
 input UserRequest {
@@ -22,11 +50,29 @@ input UserRequest {
 }
 
 type Mutation {
+  login(input: LoginRequest!): TokensResponse!
+  restoreTokens(input: RestoreTokensRequest!): TokensResponse!
   createUser(input: CreateUserRequest!): CreateResponse!
+  createIssue(input: CreateIssueRequest!): CreateResponse!
+}
+
+input LoginRequest {
+  email: String!
+  password: String!
+}
+
+input RestoreTokensRequest {
+  refreshToken: String!
 }
 
 input CreateUserRequest {
   email: String!
   password: String!
   nickname: String!
+}
+
+input CreateIssueRequest {
+  title: String!
+  contents: String!
+  type: IssueType!
 }

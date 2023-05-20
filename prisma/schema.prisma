@@ -10,13 +10,39 @@ datasource db {
   url      = env("MONGO_URL")
 }
 
+enum UserStatus {
+  ACTIVE
+  DELETE
+}
+
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
   email        String
   nickname     String
   password     String
   iconImageUrl String?
-  createdAt    DateTime @default(now()) @db.Date
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now()) @db.Date
+  Issues       Issue[]
 
   @@map("users")
+}
+
+enum IssueType {
+  FREE
+  ISSUE
+  POSTSCRIPT
+}
+
+model Issue {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  type         IssueType
+  title        String
+  contents     String
+  countOfViews Int       @default(0)
+  userId       String    @db.ObjectId
+  user         User      @relation(fields: [userId], references: [id])
+  createdAt    DateTime  @default(now()) @db.Date
+
+  @@map("issues")
 }
