@@ -1,5 +1,5 @@
 import {Field, Int, ObjectType} from "@nestjs/graphql";
-import {IssueType} from "@/apis/integration/enum/enum";
+import {IssueType} from "@/apis/integration/type/enum";
 import {Issue, User} from "@prisma/client";
 
 @ObjectType()

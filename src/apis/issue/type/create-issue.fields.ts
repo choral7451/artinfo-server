@@ -1,4 +1,4 @@
-import {IssueType} from "@/apis/integration/enum/enum";
+import {IssueType} from "@/apis/integration/type/enum";
 
 export interface CreateIssueFields {
   userId: string

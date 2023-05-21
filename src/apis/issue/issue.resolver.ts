@@ -6,6 +6,9 @@ import {JwtAuthGuard} from "@/commons/auth/jwt-auth.guard";
 import {CreateIssueRequest} from "@/apis/issue/dto/request/create-issue.request";
 import {Signature} from "@/commons/decorator/signature";
 import {IssueResponse} from "@/apis/issue/dto/response/issue.response";
+import {IssueRequest} from "@/apis/issue/dto/request/issue.request";
+import {IssuesRequest} from "@/apis/issue/dto/request/issues.request";
+import {IssuesResponse} from "@/apis/issue/dto/response/issues.response";
 
 @Resolver()
 export class IssueResolver {
@@ -13,9 +16,16 @@ export class IssueResolver {
     private readonly issueService: IssueService
   ) {}
 
+  @Query(() => IssuesResponse)
+  async getIssues(@Args('input') request: IssuesRequest) {
+    const issues = await this.issueService.getIssues(request)
+    const countOfIssues = await this.issueService.countIssues(request)
+    return IssuesResponse.fromIssues(issues, countOfIssues)
+  }
+
   @Query(() => IssueResponse)
-  async getIssue() {
-    const issue = await this.issueService.getIssueById('64681724bc738d40757b11f9')
+  async getIssue(@Args('input') request: IssueRequest) {
+    const issue = await this.issueService.getIssueById(request.id)
     return IssueResponse.fromIssue(issue)
   }
 

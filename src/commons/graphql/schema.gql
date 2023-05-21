@@ -40,20 +40,59 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type IssuesResponse {
+  issues: [IssueResponse!]!
+  countOfTotal: Int!
+}
+
+type CommentResponse {
+  id: String!
+  tag: String
+  contents: String!
+  authorNickname: String!
+  createdAt: DateTime!
+}
+
+type CommentsResponse {
+  comments: [CommentResponse!]!
+  countOfTotal: Int!
+}
+
 type Query {
   getUser(input: UserRequest!): UserResponse!
-  getIssue: IssueResponse!
+  getIssues(input: IssuesRequest!): IssuesResponse!
+  getIssue(input: IssueRequest!): IssueResponse!
+  getComments(input: CommentsRequest!): CommentsResponse!
 }
 
 input UserRequest {
   id: String!
 }
 
+input IssuesRequest {
+  type: IssueType
+  countOfItems: Int!
+  lastItemId: String
+  keyword: String
+}
+
+input IssueRequest {
+  id: String!
+}
+
+input CommentsRequest {
+  postId: String
+  parentCommentId: String
+  countOfItems: Int!
+  lastItemId: String
+}
+
 type Mutation {
-  login(input: LoginRequest!): TokensResponse!
+  loginByEmail(input: LoginRequest!): TokensResponse!
   restoreTokens(input: RestoreTokensRequest!): TokensResponse!
   createUser(input: CreateUserRequest!): CreateResponse!
   createIssue(input: CreateIssueRequest!): CreateResponse!
+  createComment(input: CreateCommentRequest!): CreateResponse!
 }
 
 input LoginRequest {
@@ -75,4 +114,11 @@ input CreateIssueRequest {
   title: String!
   contents: String!
   type: IssueType!
+}
+
+input CreateCommentRequest {
+  postId: String!
+  parentCommentId: String
+  tag: String
+  contents: String!
 }

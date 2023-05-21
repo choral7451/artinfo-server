@@ -23,7 +23,8 @@ model User {
   iconImageUrl String?
   status       UserStatus @default(ACTIVE)
   createdAt    DateTime   @default(now()) @db.Date
-  Issues       Issue[]
+  issues       Issue[]
+  comments     Comment[]
 
   @@map("users")
 }
@@ -45,4 +46,17 @@ model Issue {
   createdAt    DateTime  @default(now()) @db.Date
 
   @@map("issues")
+}
+
+model Comment {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  postId          String   @db.ObjectId
+  parentCommentId String?  @db.ObjectId
+  tag             String?
+  contents        String
+  userId          String   @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id])
+  createdAt       DateTime @default(now()) @db.Date
+
+  @@map("comments")
 }

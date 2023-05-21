@@ -14,7 +14,7 @@ export class AuthResolver {
   ) {}
 
   @Mutation(() => TokensResponse)
-  async login(@Args('input') request: LoginRequest): Promise<TokensResponse> {
+  async loginByEmail(@Args('input') request: LoginRequest): Promise<TokensResponse> {
     const tokens = await this.authService.login(request.email, request.password)
     return TokensResponse.fromTokens(tokens.accessToken, tokens.refreshToken)
   }

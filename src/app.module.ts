@@ -4,6 +4,7 @@ import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
 import {UserModule} from "@/apis/user/user.module";
 import {AuthModule} from "@/apis/auth/auth.module";
 import {IssueModule} from "@/apis/issue/issue.module";
+import {CommentModule} from "@/apis/comment/comment.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import {IssueModule} from "@/apis/issue/issue.module";
     AuthModule,
     UserModule,
     IssueModule,
+    CommentModule,
   ],
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 import {Field, InputType} from "@nestjs/graphql";
-import {IssueType} from "@/apis/integration/enum/enum";
+import {IssueType} from "@/apis/integration/type/enum";
 
 @InputType()
 export class CreateIssueRequest {
