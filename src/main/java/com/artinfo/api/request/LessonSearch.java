@@ -11,20 +11,20 @@ import static java.lang.Math.min;
 
 @Getter
 @Setter
-@Builder
 public class LessonSearch {
 
   private static final int MAX_SIZE = 2000;
 
-  @Builder.Default
   private Integer page = 1;
-
-  @Builder.Default
   private Integer size = 20;
-
   private List<String> location;
-
   private List<String> subject;
+
+  public LessonSearch() {
+    this.page = 1;
+    this.size = 5;
+  }
+
 
   public long getOffset() {
     return (long) (max(1, page) - 1) * min(size, MAX_SIZE);

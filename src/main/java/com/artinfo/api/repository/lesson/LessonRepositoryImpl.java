@@ -53,7 +53,8 @@ public class LessonRepositoryImpl implements LessonsRepositoryCustom {
       query.where(subjectCondition);
     }
 
-    return query.limit(lessonSearch.getSize())
+    return query
+      .limit(lessonSearch.getSize())
       .offset(lessonSearch.getOffset())
       .orderBy(lesson.id.desc())
       .fetch();
