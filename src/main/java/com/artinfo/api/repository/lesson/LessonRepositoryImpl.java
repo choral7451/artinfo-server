@@ -2,7 +2,9 @@ package com.artinfo.api.repository.lesson;
 
 import com.artinfo.api.domain.Lesson;
 import com.artinfo.api.request.LessonSearch;
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.BooleanTemplate;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
