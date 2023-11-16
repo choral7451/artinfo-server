@@ -3,13 +3,11 @@ package com.artinfo.api.controller.lesson;
 import com.artinfo.api.request.LessonSearch;
 import com.artinfo.api.response.LessonDetailResponse;
 import com.artinfo.api.response.LessonResponse;
-import com.artinfo.api.response.ProfileResponse;
 import com.artinfo.api.service.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor

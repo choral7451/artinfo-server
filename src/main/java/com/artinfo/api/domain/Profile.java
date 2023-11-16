@@ -38,5 +38,5 @@ public class Profile {
 
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
-  private LocalDateTime createdAt;
+  private LocalDateTime createdAt = LocalDateTime.now();
 }
