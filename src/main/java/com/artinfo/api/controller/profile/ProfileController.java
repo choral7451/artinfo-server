@@ -1,4 +1,4 @@
-package com.artinfo.api.controller;
+package com.artinfo.api.controller.profile;
 
 import com.artinfo.api.response.ProfileResponse;
 import com.artinfo.api.service.ProfileService;

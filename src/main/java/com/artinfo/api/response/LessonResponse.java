@@ -15,11 +15,6 @@ public class LessonResponse {
   private final String locations;
   private final String name;
   private final String subjects;
-  private final String phone;
-  private final Long fee;
-  private final String intro;
-  private final String degree;
-  private final LocalDateTime createdAt;
 
   public LessonResponse(Lesson lesson) {
     this.id = lesson.getId();
@@ -28,10 +23,5 @@ public class LessonResponse {
     this.locations = lesson.getLocations();
     this.name = lesson.getName();
     this.subjects = lesson.getSubjects();
-    this.phone = lesson.getPhone();
-    this.fee = lesson.getFee();
-    this.intro = lesson.getIntro();
-    this.degree = lesson.getDegree();
-    this.createdAt = lesson.getCreatedAt();
   }
 }
