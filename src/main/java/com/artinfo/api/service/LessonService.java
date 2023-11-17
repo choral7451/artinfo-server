@@ -35,7 +35,6 @@ public class LessonService {
       .fee(lesson.getFee())
       .intro(lesson.getIntro())
       .degree(lesson.getDegree())
-      .createdAt(lesson.getCreatedAt())
       .build();
   }
 

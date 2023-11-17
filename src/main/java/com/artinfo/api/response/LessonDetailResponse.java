@@ -3,7 +3,6 @@ package com.artinfo.api.response;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -20,5 +19,4 @@ public class LessonDetailResponse {
   private final Long fee;
   private final String intro;
   private final String degree;
-  private final LocalDateTime createdAt;
 }

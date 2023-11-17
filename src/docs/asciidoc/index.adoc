@@ -1,3 +1,25 @@
-include::{snippets}/index/http-request.adoc[]
-include::{snippets}/index/http-response.adoc[]
-include::{snippets}/index/curl-request.adoc[]
+= 아트인포 API
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+
+== 레슨 단건 조회
+=== 요청
+include::{snippets}/get-lesson/http-request.adoc[]
+include::{snippets}/get-lesson/curl-request.adoc[]
+include::{snippets}/get-lesson/path-parameters.adoc[]
+
+=== 응답
+include::{snippets}/get-lesson/http-response.adoc[]
+include::{snippets}/get-lesson/response-fields.adoc[]
+
+== 레슨 목록 조회
+=== 요청
+include::{snippets}/get-lessons/http-request.adoc[]
+include::{snippets}/get-lessons/curl-request.adoc[]
+include::{snippets}/get-lessons/query-parameters.adoc[]
+
+=== 응답
+include::{snippets}/get-lessons/http-response.adoc[]
+include::{snippets}/get-lessons/response-fields.adoc[]
+
