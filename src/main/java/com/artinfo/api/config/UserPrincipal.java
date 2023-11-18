@@ -13,12 +13,12 @@ public class UserPrincipal extends User {
   public UserPrincipal(com.artinfo.api.domain.User user) {
     super(user.getEmail(), user.getPassword(),
       List.of(
-        new SimpleGrantedAuthority("ROLE_USER")
+        new SimpleGrantedAuthority("USER")
       ));
     this.userId = user.getId();
   }
-
-  public UUID getUserId() {
-    return userId;
-  }
+//
+//  public UUID getUserId() {
+//    return userId;
+//  }
 }

@@ -25,7 +25,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-    log.error("[인증성공]user={}", principal.getUsername());
+    log.info("[인증성공] user={}", principal.getUsername());
 
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(UTF_8.displayName());
