@@ -104,6 +104,8 @@ public class LessonControllerDocTest {
       .andExpect(status().isOk())
       .andDo(document("get-lessons",
         queryParameters(
+          parameterWithName("page").description("페이지 번호").optional(),
+          parameterWithName("size").description("레슨 조회 개수").optional(),
           parameterWithName("location").description("레슨 위치 필터").optional(),
           parameterWithName("subjects").description("레슨 과목 필터").optional()
         ),
