@@ -1,0 +1,22 @@
+### 회원가입
+
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "name": "artinfo",
+  "email": "artinfokorea2022@gmail.com",
+  "password": "a123456!"
+}
+ㅁㄴ
+### 로그인
+
+POST http://localhost:8080/auth/login/email
+Content-Type: application/json
+
+{
+  "email": "artinfokorea2022@gmail.com",
+  "password": "a123456!"
+}
+
+### 유저 페이지

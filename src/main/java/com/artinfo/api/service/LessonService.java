@@ -1,11 +1,11 @@
 package com.artinfo.api.service;
 
 import com.artinfo.api.domain.Lesson;
-import com.artinfo.api.exception.ProfileNotFound;
+import com.artinfo.api.exception.UserNotFound;
 import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.request.LessonSearch;
-import com.artinfo.api.response.LessonDetailResponse;
-import com.artinfo.api.response.LessonResponse;
+import com.artinfo.api.response.lesson.LessonDetailResponse;
+import com.artinfo.api.response.lesson.LessonResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class LessonService {
 
   public LessonDetailResponse get(Long id) {
     Lesson lesson = lessonRepository.findById(id)
-      .orElseThrow(ProfileNotFound::new);
+      .orElseThrow(UserNotFound::new);
 
     return LessonDetailResponse.builder()
       .id(lesson.getId())

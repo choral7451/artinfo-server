@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class ProfileResponse {
+public class UserResponse {
   private UUID id;
   private String name;
   private String email;

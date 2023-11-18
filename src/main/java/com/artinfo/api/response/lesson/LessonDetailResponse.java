@@ -1,4 +1,4 @@
-package com.artinfo.api.response;
+package com.artinfo.api.response.lesson;
 
 import lombok.Builder;
 import lombok.Getter;
