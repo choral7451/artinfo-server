@@ -24,3 +24,14 @@ include::{snippets}/get-lessons/query-parameters.adoc[]
 include::{snippets}/get-lessons/http-response.adoc[]
 include::{snippets}/get-lessons/response-fields.adoc[]
 
+== 채용
+=== 채용 단건 조회
+==== 요청
+include::{snippets}/get-recruit_job/http-request.adoc[]
+include::{snippets}/get-recruit_job/curl-request.adoc[]
+include::{snippets}/get-recruit_job/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-recruit_job/http-response.adoc[]
+include::{snippets}/get-recruit_job/response-fields.adoc[]
+

@@ -75,7 +75,7 @@ tasks.named('test') {
 }
 
 bootJar {
-	archiveVersion = "0.1.5"
+	archiveVersion = "0.2.0"
 	dependsOn asciidoctor
 	copy {
 		from asciidoctor.outputDir
