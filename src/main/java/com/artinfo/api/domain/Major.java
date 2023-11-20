@@ -13,9 +13,9 @@ import java.util.Set;
 
 @Entity
 @Getter
-@Table(name = "locations")
+@Table(name = "majors")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Location {
+public class Major {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +29,11 @@ public class Location {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @JsonBackReference
-  @ManyToMany(mappedBy = "locations")
+  @ManyToMany(mappedBy = "majors")
   private Set<Lesson> lessons;
 
   @Builder
-  public Location(String name) {
+  public Major(String name) {
     this.name = name;
   }
 }

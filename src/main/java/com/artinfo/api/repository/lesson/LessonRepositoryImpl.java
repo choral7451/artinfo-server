@@ -1,18 +1,15 @@
 package com.artinfo.api.repository.lesson;
 
 import com.artinfo.api.domain.Lesson;
+import com.artinfo.api.domain.QLesson;
+import com.artinfo.api.domain.QLocation;
+import com.artinfo.api.domain.QMajor;
 import com.artinfo.api.request.LessonSearch;
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.BooleanTemplate;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-
-import static com.artinfo.api.domain.QLesson.*;
 
 @RequiredArgsConstructor
 public class LessonRepositoryImpl implements LessonsRepositoryCustom {
@@ -21,41 +18,27 @@ public class LessonRepositoryImpl implements LessonsRepositoryCustom {
 
   @Override
   public List<Lesson> getList(LessonSearch lessonSearch) {
-    BooleanExpression locationCondition = null;
+    QLesson lesson = QLesson.lesson;
+    QLocation location = QLocation.location;
+    QMajor major = QMajor.major;
+
+    var query = jpaQueryFactory.selectFrom(lesson);
+
     if (lessonSearch.getLocation() != null && !lessonSearch.getLocation().isEmpty()) {
-      for (String location : lessonSearch.getLocation()) {
-        BooleanExpression currentCondition = Expressions.booleanTemplate(
-          "CAST({0} AS text) like {1}",
-          lesson.locations,
-          "%" + location + "%"
-        );
+      BooleanExpression locationCondition = null;
+      for (String loc : lessonSearch.getLocation()) {
+        BooleanExpression currentCondition = location.name.like("%" + loc + "%");
         locationCondition = locationCondition == null ? currentCondition : locationCondition.or(currentCondition);
       }
+      query.leftJoin(lesson.locations, location).where(locationCondition);
     }
 
-    BooleanExpression subjectCondition = null;
-    if (lessonSearch.getSubject() != null && !lessonSearch.getSubject().isEmpty()) {
-      for (String subject : lessonSearch.getSubject()) {
-        BooleanExpression currentCondition = Expressions.booleanTemplate(
-          "CAST({0} AS text) like {1}",
-          lesson.subjects,
-          "%" + subject + "%"
-        );
-        subjectCondition = subjectCondition == null ? currentCondition : subjectCondition.or(currentCondition);
-      }
+    if (lessonSearch.getMajor() != null && !lessonSearch.getMajor().isEmpty()) {
+      query.leftJoin(lesson.majors, major)
+        .where(major.name.in(lessonSearch.getMajor()));
     }
 
-    JPAQuery<Lesson> query = jpaQueryFactory.selectFrom(lesson);
-
-    if (locationCondition != null && subjectCondition != null) {
-      query.where(locationCondition.and(subjectCondition));
-    } else if (locationCondition != null) {
-      query.where(locationCondition);
-    } else if (subjectCondition != null) {
-      query.where(subjectCondition);
-    }
-
-    return query
+    return query.distinct()
       .limit(lessonSearch.getSize())
       .offset(lessonSearch.getOffset())
       .orderBy(lesson.id.desc())

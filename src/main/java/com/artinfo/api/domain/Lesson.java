@@ -1,5 +1,6 @@
 package com.artinfo.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,13 +10,14 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Table(name = "lessons")
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lesson {
 
   @Id
@@ -28,20 +30,26 @@ public class Lesson {
   @Column(name = "image_url")
   private String imageUrl;
 
-  @ManyToMany
+  @JsonManagedReference
+  @ManyToMany()
   @JoinTable(
     name = "lessons_locations",
-    joinColumns = @JoinColumn(name = "lessons_id"),
-    inverseJoinColumns = @JoinColumn(name = "locations_id")
+    joinColumns = @JoinColumn(name = "lesson_id"),
+    inverseJoinColumns = @JoinColumn(name = "location_id")
   )
   private Set<Location> locations;
 
   @Column(name = "name")
   private String name;
 
-  @ColumnTransformer(write = "?::jsonb")
-  @Column(name = "subjects", columnDefinition = "jsonb")
-  private String subjects;
+  @JsonManagedReference
+  @ManyToMany()
+  @JoinTable(
+    name = "lessons_majors",
+    joinColumns = @JoinColumn(name = "lesson_id"),
+    inverseJoinColumns = @JoinColumn(name = "major_id")
+  )
+  private Set<Major> majors;
 
   @Column(name = "phone")
   private String phone;
@@ -52,24 +60,23 @@ public class Lesson {
   @Column(name = "intro")
   private String intro;
 
-  @ColumnTransformer(write = "?::jsonb")
-  @Column(name = "degree", columnDefinition = "jsonb")
-  private String degree;
+  @OneToMany(mappedBy = "lesson")
+  private List<Degree> degrees;
 
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Lesson(UUID profileId, String imageUrl, Set<Location> locations, String name, String subjects, String phone, Long fee, String intro, String degree, LocalDateTime createdAt) {
+  public Lesson(UUID profileId, String imageUrl, Set<Location> locations, String name, Set<Major> majors, String phone, Long fee, String intro, List<Degree> degrees) {
     this.profileId = profileId;
     this.imageUrl = imageUrl;
     this.locations = locations;
     this.name = name;
-    this.subjects = subjects;
+    this.majors = majors;
     this.phone = phone;
     this.fee = fee;
     this.intro = intro;
-    this.degree = degree;
+    this.degrees = degrees;
   }
 }

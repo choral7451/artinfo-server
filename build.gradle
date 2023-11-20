@@ -53,6 +53,8 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-crypto'
 	implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
 
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
+
 }
 
 test {

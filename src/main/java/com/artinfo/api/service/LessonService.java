@@ -1,6 +1,9 @@
 package com.artinfo.api.service;
 
+import com.artinfo.api.domain.Degree;
 import com.artinfo.api.domain.Lesson;
+import com.artinfo.api.domain.Location;
+import com.artinfo.api.domain.Major;
 import com.artinfo.api.exception.UserNotFound;
 import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.request.LessonSearch;
@@ -28,14 +31,21 @@ public class LessonService {
       .id(lesson.getId())
       .profileId(lesson.getProfileId())
       .imageUrl(lesson.getImageUrl())
-      .locations(lesson.getLocations())
+      .locations(lesson.getLocations().stream().map(Location::getName)
+        .collect(Collectors.toList()))
       .name(lesson.getName())
-      .subjects(lesson.getSubjects())
+      .majors(lesson.getMajors().stream().map(Major::getName)
+        .collect(Collectors.toList())
+      )
       .phone(lesson.getPhone())
       .fee(lesson.getFee())
       .intro(lesson.getIntro())
-      .degree(lesson.getDegree())
-      .build();
+      .degrees(lesson.getDegrees().stream()
+        .collect(Collectors.groupingBy(
+          Degree::getDegree,
+          Collectors.mapping(Degree::getCampusName, Collectors.toList())
+        ))
+      ).build();
   }
 
   public List<LessonResponse> getList(LessonSearch lessonSearch) {

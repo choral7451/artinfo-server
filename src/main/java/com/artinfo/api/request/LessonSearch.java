@@ -17,7 +17,7 @@ public class LessonSearch {
   private Integer page = 1;
   private Integer size = 20;
   private List<String> location;
-  private List<String> subject;
+  private List<String> major;
 
   public LessonSearch() {
     this.page = 1;
