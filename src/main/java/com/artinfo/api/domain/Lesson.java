@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -27,9 +28,13 @@ public class Lesson {
   @Column(name = "image_url")
   private String imageUrl;
 
-  @ColumnTransformer(write = "?::jsonb")
-  @Column(name = "locations", columnDefinition = "jsonb")
-  private String locations;
+  @ManyToMany
+  @JoinTable(
+    name = "lessons_locations",
+    joinColumns = @JoinColumn(name = "lessons_id"),
+    inverseJoinColumns = @JoinColumn(name = "locations_id")
+  )
+  private Set<Location> locations;
 
   @Column(name = "name")
   private String name;
@@ -56,7 +61,7 @@ public class Lesson {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Lesson(UUID profileId, String imageUrl, String locations, String name, String subjects, String phone, Long fee, String intro, String degree, LocalDateTime createdAt) {
+  public Lesson(UUID profileId, String imageUrl, Set<Location> locations, String name, String subjects, String phone, Long fee, String intro, String degree, LocalDateTime createdAt) {
     this.profileId = profileId;
     this.imageUrl = imageUrl;
     this.locations = locations;

@@ -1,9 +1,10 @@
 package com.artinfo.api.response.lesson;
 
 import com.artinfo.api.domain.Lesson;
+import com.artinfo.api.domain.Location;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -12,7 +13,7 @@ public class LessonResponse {
   private final Long id;
   private final UUID profileId;
   private final String imageUrl;
-  private final String locations;
+  private final Set<Location> locations;
   private final String name;
   private final String subjects;
 
