@@ -13,12 +13,14 @@ import com.artinfo.api.response.lesson.LessonDetailResponse;
 import com.artinfo.api.response.lesson.LessonResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LessonService {
 
@@ -89,7 +91,7 @@ public class LessonService {
     }
 
     Lesson lesson = Lesson.builder()
-      .userId(userId)
+      .userId(lessonCreate.getUserId())
       .locations(locations)
       .majors(majors)
       .imageUrl(lessonCreate.getImageUrl())

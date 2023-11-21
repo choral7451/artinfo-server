@@ -1,9 +1,13 @@
 package com.artinfo.api.controller.lesson;
 
 import com.artinfo.api.domain.User;
+import com.artinfo.api.repository.lesson.LessonRepository;
+import com.artinfo.api.repository.lesson.LocationRepository;
+import com.artinfo.api.repository.lesson.MajorRepository;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.request.LessonCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +34,22 @@ class LessonControllerTest {
   @Autowired
   private UserRepository userRepository;
 
-//  @BeforeEach
-//  void clean() {
-//
-//  }
+  @Autowired
+  private LessonRepository lessonRepository;
+
+  @Autowired
+  private LocationRepository locationRepository;
+
+  @Autowired
+  private MajorRepository majorRepository;
+
+  @BeforeEach
+  void clean() {
+    userRepository.deleteAll();
+    lessonRepository.deleteAll();
+    locationRepository.deleteAll();
+    majorRepository.deleteAll();
+  }
 
   @Test
   @DisplayName("레슨 생성")

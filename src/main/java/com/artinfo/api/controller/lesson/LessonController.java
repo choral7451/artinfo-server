@@ -7,12 +7,14 @@ import com.artinfo.api.response.lesson.LessonDetailResponse;
 import com.artinfo.api.response.lesson.LessonResponse;
 import com.artinfo.api.service.LessonService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class LessonController {
@@ -29,8 +31,9 @@ public class LessonController {
     return lessonService.get(id);
   }
 
+  //TODO 로그인 구현 후 추구 개선 필요
   @PostMapping("/lessons")
-  public void create(@AuthenticationPrincipal UserPrincipal userPrincipal, @ModelAttribute LessonCreate lessonCreate) {
+  public void create(@RequestBody LessonCreate lessonCreate) {
     lessonService.create(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"), lessonCreate);
   }
 }
