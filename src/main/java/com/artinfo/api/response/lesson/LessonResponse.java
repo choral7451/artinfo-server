@@ -6,7 +6,6 @@ import com.artinfo.api.domain.Major;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 public class LessonResponse {
 
   private final Long id;
-  private final UUID profileId;
+  private final UUID userId;
   private final String imageUrl;
   private final List<String> locations;
   private final String name;
@@ -22,7 +21,7 @@ public class LessonResponse {
 
   public LessonResponse(Lesson lesson) {
     this.id = lesson.getId();
-    this.profileId = lesson.getProfileId();
+    this.userId = lesson.getUserId();
     this.imageUrl = lesson.getImageUrl();
     this.locations = lesson.getLocations().stream().map(Location::getName).collect(Collectors.toList());
     this.name = lesson.getName();

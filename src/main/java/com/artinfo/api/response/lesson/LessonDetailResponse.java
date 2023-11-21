@@ -12,13 +12,13 @@ import java.util.UUID;
 public class LessonDetailResponse {
 
   private final Long id;
-  private final UUID profileId;
+  private final UUID userId;
   private final String imageUrl;
   private final List<String> locations;
   private final String name;
   private final List<String> majors;
   private final String phone;
-  private final Long fee;
+  private final Integer fee;
   private final String intro;
   private final Map<String, List<String>> degrees;
 }

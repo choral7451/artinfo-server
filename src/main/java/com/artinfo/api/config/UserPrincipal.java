@@ -17,8 +17,8 @@ public class UserPrincipal extends User {
       ));
     this.userId = user.getId();
   }
-//
-//  public UUID getUserId() {
-//    return userId;
-//  }
+
+  public UUID getUserId() {
+    return userId;
+  }
 }

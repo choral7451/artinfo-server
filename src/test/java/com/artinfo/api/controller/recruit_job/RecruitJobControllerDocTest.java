@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
@@ -59,17 +61,18 @@ public class RecruitJobControllerDocTest {
       .andDo(document("get-recruit_job",
         pathParameters(
           parameterWithName("jobId").description("채용 ID")
+            .attributes(Attributes.key("type").value("Numnber"))
         ),
         responseFields(
-          fieldWithPath("id").description("채용 ID"),
-          fieldWithPath("profileId").description("프로필 ID"),
-          fieldWithPath("title").description("채용 제목"),
-          fieldWithPath("companyName").description("회사 이름"),
-          fieldWithPath("companyImageUrl").description("회사 이미지 주소"),
-          fieldWithPath("linkUrl").description("채용 링크 주소"),
-          fieldWithPath("contents").description("채용 내용"),
-          fieldWithPath("category").description("채용 카테고리"),
-          fieldWithPath("active").description("채용 활성화 여부")
+          fieldWithPath("id").type(JsonFieldType.NUMBER).description("채용 ID"),
+          fieldWithPath("profileId").type(JsonFieldType.STRING).description("프로필 ID"),
+          fieldWithPath("title").type(JsonFieldType.STRING).description("채용 제목"),
+          fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사 이름"),
+          fieldWithPath("companyImageUrl").type(JsonFieldType.STRING).description("회사 이미지 주소"),
+          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("채용 링크 주소"),
+          fieldWithPath("contents").type(JsonFieldType.STRING).description("채용 내용"),
+          fieldWithPath("category").type(JsonFieldType.STRING).description("채용 카테고리"),
+          fieldWithPath("active").type(JsonFieldType.BOOLEAN).description("채용 활성화 여부")
         )
       ));
 

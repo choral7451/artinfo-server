@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -25,13 +24,13 @@ public class Lesson {
   private Long id;
 
   @Column(name = "profile_id")
-  private UUID profileId;
+  private UUID userId;
 
   @Column(name = "image_url")
   private String imageUrl;
 
   @JsonManagedReference
-  @ManyToMany()
+  @ManyToMany(cascade = CascadeType.REMOVE)
   @JoinTable(
     name = "lessons_locations",
     joinColumns = @JoinColumn(name = "lesson_id"),
@@ -43,7 +42,7 @@ public class Lesson {
   private String name;
 
   @JsonManagedReference
-  @ManyToMany()
+  @ManyToMany(cascade = CascadeType.REMOVE)
   @JoinTable(
     name = "lessons_majors",
     joinColumns = @JoinColumn(name = "lesson_id"),
@@ -55,12 +54,12 @@ public class Lesson {
   private String phone;
 
   @Column(name = "fee")
-  private Long fee;
+  private Integer fee;
 
   @Column(name = "intro")
   private String intro;
 
-  @OneToMany(mappedBy = "lesson")
+  @OneToMany(mappedBy = "lesson",cascade = CascadeType.REMOVE)
   private List<Degree> degrees;
 
   @CreatedDate
@@ -68,8 +67,8 @@ public class Lesson {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Lesson(UUID profileId, String imageUrl, Set<Location> locations, String name, Set<Major> majors, String phone, Long fee, String intro, List<Degree> degrees) {
-    this.profileId = profileId;
+  public Lesson(UUID userId, String imageUrl, Set<Location> locations, String name, Set<Major> majors, String phone, Integer fee, String intro, List<Degree> degrees) {
+    this.userId = userId;
     this.imageUrl = imageUrl;
     this.locations = locations;
     this.name = name;

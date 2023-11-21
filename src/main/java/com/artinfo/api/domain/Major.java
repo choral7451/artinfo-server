@@ -29,7 +29,7 @@ public class Major {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @JsonBackReference
-  @ManyToMany(mappedBy = "majors")
+  @ManyToMany(mappedBy = "majors", cascade = CascadeType.REMOVE)
   private Set<Lesson> lessons;
 
   @Builder
