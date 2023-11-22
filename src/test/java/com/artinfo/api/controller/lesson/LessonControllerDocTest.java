@@ -196,7 +196,7 @@ public class LessonControllerDocTest {
     degreeRepository.save(degree);
 
     //expected
-    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/lessons")
+    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/lessons?page=1&size=5&location=서울&major=피아노")
         .accept(MediaType.APPLICATION_JSON)
       )
       .andExpect(status().isOk())
