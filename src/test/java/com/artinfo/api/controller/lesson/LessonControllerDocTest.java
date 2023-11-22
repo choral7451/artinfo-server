@@ -3,11 +3,15 @@ package com.artinfo.api.controller.lesson;
 import com.artinfo.api.domain.Degree;
 import com.artinfo.api.domain.Location;
 import com.artinfo.api.domain.Major;
+import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.lesson.Lesson;
 import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.repository.lesson.LocationRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
 import com.artinfo.api.repository.user.DegreeRepository;
+import com.artinfo.api.repository.user.UserRepository;
+import com.artinfo.api.request.lesson.LessonCreate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,14 +23,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Map;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,6 +45,12 @@ public class LessonControllerDocTest {
 
   @Autowired
   private MockMvc mockMvc;
+
+  @Autowired
+  private ObjectMapper objectMapper;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @Autowired
   private LessonRepository lessonRepository;
@@ -54,10 +66,11 @@ public class LessonControllerDocTest {
 
   @BeforeEach
   void clean() {
-//    majorRepository.deleteAll();
-//    lessonRepository.deleteAll();
-//    locationRepository.deleteAll();
-//    degreeRepository.deleteAll();
+    userRepository.deleteAll();
+    majorRepository.deleteAll();
+    lessonRepository.deleteAll();
+    locationRepository.deleteAll();
+    degreeRepository.deleteAll();
   }
 
 
@@ -66,6 +79,12 @@ public class LessonControllerDocTest {
   @DisplayName("레슨 단건 조회")
   void getLesson() throws Exception {
     //given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+    userRepository.save(user);
 
     Location location = Location.builder()
       .name("서울 우리집")
@@ -78,6 +97,7 @@ public class LessonControllerDocTest {
     majorRepository.save(major);
 
     Lesson lesson = Lesson.builder()
+      .user(user)
       .imageUrl("https://artinfokorea.com/_next/image?url=https%3A%2F%2Fycuajmirzlqpgzuonzca.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fartinfo%2Flessons%2F17%2F1698037484500.54&w=256&q=100")
       .locations(List.of(location))
       .name("김규성")
@@ -104,11 +124,14 @@ public class LessonControllerDocTest {
       .build();
     degreeRepository.save(degree2);
 
+    //expected
     this.mockMvc.perform(RestDocumentationRequestBuilders.get("/lessons/{lessonId}", lesson.getId())
         .accept(MediaType.APPLICATION_JSON)
       )
       .andExpect(status().isOk())
       .andDo(document("get-lesson",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
         pathParameters(
           parameterWithName("lessonId").description("레슨 ID")
             .attributes(key("type").value("Number"))
@@ -134,6 +157,13 @@ public class LessonControllerDocTest {
   @DisplayName("레슨 목록 조회")
   void getLessonList() throws Exception {
     //given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+    userRepository.save(user);
+
     Location location = Location.builder()
       .name("서울 전체")
       .build();
@@ -145,6 +175,7 @@ public class LessonControllerDocTest {
     majorRepository.save(major);
 
     Lesson lesson = Lesson.builder()
+      .user(user)
       .imageUrl("https://artinfokorea.com/_next/image?url=https%3A%2F%2Fycuajmirzlqpgzuonzca.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fartinfo%2Flessons%2F17%2F1698037484500.54&w=256&q=100")
       .locations(List.of(location))
       .name("김규성")
@@ -164,11 +195,14 @@ public class LessonControllerDocTest {
       .build();
     degreeRepository.save(degree);
 
+    //expected
     this.mockMvc.perform(RestDocumentationRequestBuilders.get("/lessons")
         .accept(MediaType.APPLICATION_JSON)
       )
       .andExpect(status().isOk())
       .andDo(document("get-lessons",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
         queryParameters(
           parameterWithName("page").description("페이지 번호").optional()
             .attributes(key("type").value("Number")),
@@ -186,6 +220,57 @@ public class LessonControllerDocTest {
           fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL"),
           fieldWithPath("[].locations").type(JsonFieldType.ARRAY).description("레슨 위치"),
           fieldWithPath("[].majors").type(JsonFieldType.ARRAY).description("레슨 과목")
+        )
+      ));
+  }
+
+  @Test
+  @DisplayName("레슨 생성")
+  void save() throws Exception {
+    //given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+
+    userRepository.save(user);
+
+    LessonCreate request = LessonCreate.builder()
+      .userId(user.getId())
+      .imageUrl("www.sample_image_url.com")
+      .locations(List.of("서울 전체", "강원도 전체"))
+      .name("임성준")
+      .majors(List.of("피아노", "성악"))
+      .phone("010-0000-0000")
+      .fee(800000)
+      .intro("안녕하세요")
+      .degrees(Map.of("MASTER", List.of("서울대학교", "연세대학교")))
+      .build();
+
+    String json = objectMapper.writeValueAsString(request);
+
+    //expected
+    this.mockMvc.perform(RestDocumentationRequestBuilders.post("/lessons")
+        .contentType(APPLICATION_JSON)
+        .content(json)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("create-lesson",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+        requestFields(
+          fieldWithPath("userId").type(JsonFieldType.STRING).description("유저 ID"),
+          fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+          fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+          fieldWithPath("locations").type(JsonFieldType.ARRAY).description("레슨 장소"),
+          fieldWithPath("majors").type(JsonFieldType.ARRAY).description("전공 과목"),
+          fieldWithPath("phone").type(JsonFieldType.STRING).description("휴대폰 번호"),
+          fieldWithPath("fee").type(JsonFieldType.NUMBER).description("레슨비"),
+          fieldWithPath("intro").type(JsonFieldType.STRING).description("소개"),
+          fieldWithPath("degrees").type(JsonFieldType.OBJECT).description("학위:대학 목록"),
+          fieldWithPath("degrees.*").type(JsonFieldType.ARRAY).description("학위 목록"),
+          fieldWithPath("degrees.*[]").type(JsonFieldType.ARRAY).description("해당 학위에 대한 대학 목록")
         )
       ));
   }

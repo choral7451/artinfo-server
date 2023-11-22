@@ -113,6 +113,7 @@ class LessonControllerTest {
     majorRepository.save(major);
 
     Lesson lesson = Lesson.builder()
+      .user(user)
       .imageUrl("https://artinfokorea.com/_next/image?url=https%3A%2F%2Fycuajmirzlqpgzuonzca.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fartinfo%2Flessons%2F17%2F1698037484500.54&w=256&q=100")
       .locations(List.of(location))
       .name("김규성")

@@ -76,6 +76,9 @@ public class LessonService {
     User user = userRepository.findById(lessonCreate.getUserId())
       .orElseThrow(UserNotFound::new);
 
+    //todo 추후 삭제 필요
+    user.editIsTeacher(true);
+
     List<Location> locations = new ArrayList<>();
     for(String location: lessonCreate.getLocations()) {
       Optional<Location> fetchedLocation = locationRepository.findByName(location);
@@ -184,6 +187,16 @@ public class LessonService {
   }
 
   public void delete(Long id) {
+
+    //todo 추후 삭제 필요
+    Lesson lesson = lessonRepository.findById(id)
+      .orElseThrow(LessonNotFound::new);
+
+    User user = userRepository.findById(lesson.getUser().getId())
+      .orElseThrow(UserNotFound::new);
+
+    user.editIsTeacher(false);
+
     lessonRepository.deleteById(id);
   }
 }

@@ -55,4 +55,8 @@ public class User {
     this.password = password;
     this.createdAt = LocalDateTime.now();
   }
+
+  public void editIsTeacher(Boolean isTeacher) {
+    this.isTeacher = isTeacher;
+  }
 }
