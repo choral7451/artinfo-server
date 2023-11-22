@@ -1,9 +1,9 @@
 package com.artinfo.api.controller.lesson;
 
 import com.artinfo.api.domain.Degree;
-import com.artinfo.api.domain.Lesson;
 import com.artinfo.api.domain.Location;
 import com.artinfo.api.domain.Major;
+import com.artinfo.api.domain.lesson.Lesson;
 import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.repository.lesson.LocationRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
@@ -22,8 +22,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Set;
-import java.util.UUID;
+import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -55,10 +54,10 @@ public class LessonControllerDocTest {
 
   @BeforeEach
   void clean() {
-    majorRepository.deleteAll();
-    lessonRepository.deleteAll();
-    locationRepository.deleteAll();
-    degreeRepository.deleteAll();
+//    majorRepository.deleteAll();
+//    lessonRepository.deleteAll();
+//    locationRepository.deleteAll();
+//    degreeRepository.deleteAll();
   }
 
 
@@ -69,21 +68,20 @@ public class LessonControllerDocTest {
     //given
 
     Location location = Location.builder()
-      .name("서울 전체")
+      .name("서울 우리집")
       .build();
     locationRepository.save(location);
 
     Major major = Major.builder()
-      .name("피아노")
+      .name("플루트")
       .build();
     majorRepository.save(major);
 
     Lesson lesson = Lesson.builder()
-      .userId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .imageUrl("https://artinfokorea.com/_next/image?url=https%3A%2F%2Fycuajmirzlqpgzuonzca.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fartinfo%2Flessons%2F17%2F1698037484500.54&w=256&q=100")
-      .locations(Set.of(location))
+      .locations(List.of(location))
       .name("김규성")
-      .majors(Set.of(major))
+      .majors(List.of(major))
       .phone("010-4028-7451")
       .fee(80000)
       .intro("안녕하세요 미국에서 피아노 석사학위를 따고 한국에 들어온 김규성입니다.\n" +
@@ -147,11 +145,10 @@ public class LessonControllerDocTest {
     majorRepository.save(major);
 
     Lesson lesson = Lesson.builder()
-      .userId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .imageUrl("https://artinfokorea.com/_next/image?url=https%3A%2F%2Fycuajmirzlqpgzuonzca.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fartinfo%2Flessons%2F17%2F1698037484500.54&w=256&q=100")
-      .locations(Set.of(location))
+      .locations(List.of(location))
       .name("김규성")
-      .majors(Set.of(major))
+      .majors(List.of(major))
       .phone("010-4028-7451")
       .fee(80000)
       .intro("안녕하세요 미국에서 피아노 석사학위를 따고 한국에 들어온 김규성입니다.\n" +
@@ -179,7 +176,7 @@ public class LessonControllerDocTest {
             .attributes(key("type").value("Number")),
           parameterWithName("location").description("레슨 위치 필터").optional()
             .attributes(key("type").value("String")),
-          parameterWithName("subjects").description("레슨 과목 필터").optional()
+          parameterWithName("major").description("레슨 과목 필터").optional()
             .attributes(key("type").value("String"))
         ),
         responseFields(

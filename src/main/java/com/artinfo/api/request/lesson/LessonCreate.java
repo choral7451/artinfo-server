@@ -1,4 +1,4 @@
-package com.artinfo.api.request;
+package com.artinfo.api.request.lesson;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,9 @@ import java.util.UUID;
 @Setter
 @Builder
 public class LessonCreate {
+  //todo 추후 삭제 필요
   private UUID userId;
+
   private String imageUrl;
   private List<String> locations;
   private String name;

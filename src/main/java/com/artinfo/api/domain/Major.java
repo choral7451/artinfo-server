@@ -1,5 +1,6 @@
 package com.artinfo.api.domain;
 
+import com.artinfo.api.domain.lesson.Lesson;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,7 +31,7 @@ public class Major {
 
   @JsonBackReference
   @ManyToMany(mappedBy = "majors", cascade = CascadeType.REMOVE)
-  private Set<Lesson> lessons;
+  private List<Lesson> lessons;
 
   @Builder
   public Major(String name) {

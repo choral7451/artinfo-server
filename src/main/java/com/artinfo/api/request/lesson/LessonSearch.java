@@ -1,4 +1,4 @@
-package com.artinfo.api.request;
+package com.artinfo.api.request.lesson;
 
 import lombok.Getter;
 import lombok.Setter;

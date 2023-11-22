@@ -1,6 +1,6 @@
 package com.artinfo.api.response.lesson;
 
-import com.artinfo.api.domain.Lesson;
+import com.artinfo.api.domain.lesson.Lesson;
 import com.artinfo.api.domain.Location;
 import com.artinfo.api.domain.Major;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class LessonResponse {
 
   public LessonResponse(Lesson lesson) {
     this.id = lesson.getId();
-    this.userId = lesson.getUserId();
+    this.userId = lesson.getUser().getId();
     this.imageUrl = lesson.getImageUrl();
     this.locations = lesson.getLocations().stream().map(Location::getName).collect(Collectors.toList());
     this.name = lesson.getName();

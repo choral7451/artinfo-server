@@ -1,5 +1,6 @@
 package com.artinfo.api.domain;
 
+import com.artinfo.api.domain.lesson.Lesson;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

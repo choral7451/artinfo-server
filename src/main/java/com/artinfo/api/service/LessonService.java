@@ -1,14 +1,21 @@
 package com.artinfo.api.service;
 
-import com.artinfo.api.domain.*;
+import com.artinfo.api.domain.Degree;
+import com.artinfo.api.domain.Location;
+import com.artinfo.api.domain.Major;
+import com.artinfo.api.domain.User;
+import com.artinfo.api.domain.lesson.Lesson;
+import com.artinfo.api.domain.lesson.LessonEditor;
+import com.artinfo.api.exception.LessonNotFound;
 import com.artinfo.api.exception.UserNotFound;
 import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.repository.lesson.LocationRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
 import com.artinfo.api.repository.user.DegreeRepository;
 import com.artinfo.api.repository.user.UserRepository;
-import com.artinfo.api.request.LessonCreate;
-import com.artinfo.api.request.LessonSearch;
+import com.artinfo.api.request.lesson.LessonCreate;
+import com.artinfo.api.request.lesson.LessonEdit;
+import com.artinfo.api.request.lesson.LessonSearch;
 import com.artinfo.api.response.lesson.LessonDetailResponse;
 import com.artinfo.api.response.lesson.LessonResponse;
 import jakarta.transaction.Transactional;
@@ -16,7 +23,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +46,7 @@ public class LessonService {
 
     return LessonDetailResponse.builder()
       .id(lesson.getId())
-      .userId(lesson.getUserId())
+      .userId(lesson.getUser().getId())
       .imageUrl(lesson.getImageUrl())
       .locations(lesson.getLocations().stream().map(Location::getName)
         .collect(Collectors.toList()))
@@ -63,10 +73,10 @@ public class LessonService {
 
   @Transactional
   public void create(UUID userId, LessonCreate lessonCreate) {
-//    User user = userRepository.findById(userId)
-//      .orElseThrow(UserNotFound::new);
+    User user = userRepository.findById(lessonCreate.getUserId())
+      .orElseThrow(UserNotFound::new);
 
-    Set<Location> locations = new HashSet<>();
+    List<Location> locations = new ArrayList<>();
     for(String location: lessonCreate.getLocations()) {
       Optional<Location> fetchedLocation = locationRepository.findByName(location);
       if(fetchedLocation.isPresent()) {
@@ -78,7 +88,7 @@ public class LessonService {
       }
     }
 
-    Set<Major> majors = new HashSet<>();
+    List<Major> majors = new ArrayList<>();
     for(String major: lessonCreate.getMajors()) {
       Optional<Major> fetchedMajor = majorRepository.findByName(major);
       if(fetchedMajor.isPresent()) {
@@ -91,7 +101,7 @@ public class LessonService {
     }
 
     Lesson lesson = Lesson.builder()
-      .userId(lessonCreate.getUserId())
+      .user(user)
       .locations(locations)
       .majors(majors)
       .imageUrl(lessonCreate.getImageUrl())
@@ -113,5 +123,67 @@ public class LessonService {
       .collect(Collectors.toList());
 
     degreeRepository.saveAll(degrees);
+  }
+
+  @Transactional
+  public void edit(Long lessonId, LessonEdit lessonEdit) {
+//    User user = userRepository.findById(userId)
+//      .orElseThrow(UserNotFound::new);
+
+    Lesson lesson = lessonRepository.findById(lessonId)
+        .orElseThrow(LessonNotFound::new);
+
+
+    List<Location> locations = new ArrayList<>();
+    for(String location: lessonEdit.getLocations()) {
+      Optional<Location> fetchedLocation = locationRepository.findByName(location);
+      if(fetchedLocation.isPresent()) {
+        locations.add(fetchedLocation.get());
+      } else {
+        Location CreatedLocation = Location.builder().name(location).build();
+        locationRepository.save(CreatedLocation);
+        locations.add(CreatedLocation);
+      }
+    }
+
+    List<Major> majors = new ArrayList<>();
+    for(String major: lessonEdit.getMajors()) {
+      Optional<Major> fetchedMajor = majorRepository.findByName(major);
+      if(fetchedMajor.isPresent()) {
+        majors.add(fetchedMajor.get());
+      } else {
+        Major CreatedMajor = Major.builder().name(major).build();
+        majorRepository.save(CreatedMajor);
+        majors.add(CreatedMajor);
+      }
+    }
+
+    List<Degree> degrees = lessonEdit.getDegrees().entrySet().stream()
+      .flatMap(entry -> entry.getValue().stream()
+        .map(campusName -> Degree.builder()
+          .degree(entry.getKey())
+          .campusName(campusName)
+          .lesson(lesson)
+          .build()))
+      .collect(Collectors.toList());
+
+    degreeRepository.saveAll(degrees);
+
+    LessonEditor lessonEditor = LessonEditor.builder()
+      .imageUrl(lessonEdit.getImageUrl())
+      .locations(locations)
+      .name(lessonEdit.getName())
+      .majors(majors)
+      .phone(lessonEdit.getPhone())
+      .fee(lessonEdit.getFee())
+      .intro(lessonEdit.getIntro())
+      .degrees(degrees)
+      .build();
+
+    lesson.edit(lessonEditor);
+  }
+
+  public void delete(Long id) {
+    lessonRepository.deleteById(id);
   }
 }

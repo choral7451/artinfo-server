@@ -1,5 +1,6 @@
 package com.artinfo.api.domain;
 
+import com.artinfo.api.domain.lesson.Lesson;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,6 +40,9 @@ public class User {
 
   @Column(name = "is_teacher")
   private boolean isTeacher = false;
+
+  @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+  private Lesson lesson;
 
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")

@@ -1,10 +1,10 @@
 package com.artinfo.api.repository.lesson;
 
-import com.artinfo.api.domain.Lesson;
-import com.artinfo.api.domain.QLesson;
 import com.artinfo.api.domain.QLocation;
 import com.artinfo.api.domain.QMajor;
-import com.artinfo.api.request.LessonSearch;
+import com.artinfo.api.domain.lesson.Lesson;
+import com.artinfo.api.domain.lesson.QLesson;
+import com.artinfo.api.request.lesson.LessonSearch;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
