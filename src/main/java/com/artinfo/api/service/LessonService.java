@@ -121,6 +121,7 @@ public class LessonService {
         .map(campusName -> Degree.builder()
           .degree(entry.getKey())
           .campusName(campusName)
+          .user(user)
           .lesson(lesson)
           .build()))
       .collect(Collectors.toList());
@@ -130,8 +131,8 @@ public class LessonService {
 
   @Transactional
   public void edit(Long lessonId, LessonEdit lessonEdit) {
-//    User user = userRepository.findById(userId)
-//      .orElseThrow(UserNotFound::new);
+    User user = userRepository.findById(lessonEdit.getUserId())
+      .orElseThrow(UserNotFound::new);
 
     Lesson lesson = lessonRepository.findById(lessonId)
         .orElseThrow(LessonNotFound::new);
@@ -166,6 +167,7 @@ public class LessonService {
         .map(campusName -> Degree.builder()
           .degree(entry.getKey())
           .campusName(campusName)
+          .user(user)
           .lesson(lesson)
           .build()))
       .collect(Collectors.toList());
@@ -186,6 +188,7 @@ public class LessonService {
     lesson.edit(lessonEditor);
   }
 
+  @Transactional
   public void delete(Long id) {
 
     //todo 추후 삭제 필요

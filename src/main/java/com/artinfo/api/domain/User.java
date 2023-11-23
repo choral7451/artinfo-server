@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -43,6 +44,9 @@ public class User {
 
   @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
   private Lesson lesson;
+
+  @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+  private List<Degree> degrees;
 
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")

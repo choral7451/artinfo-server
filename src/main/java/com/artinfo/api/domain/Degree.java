@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -30,17 +29,19 @@ public class Degree {
   @JoinColumn(name = "lesson_id", nullable = false)
   private Lesson lesson;
 
-  @Column(name = "profile_id")
-  private UUID profileId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "profile_id", nullable = false)
+  private User user;
 
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Degree(String degree, String campusName, Lesson lesson) {
+  public Degree(String degree, String campusName, Lesson lesson, User user) {
     this.degree = degree;
     this.campusName = campusName;
     this.lesson = lesson;
+    this.user = user;
   }
 }

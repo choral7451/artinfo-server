@@ -115,6 +115,7 @@ public class LessonControllerDocTest {
       .degree("MASTER")
       .campusName("서울대학교")
       .lesson(lesson)
+      .user(user)
       .build();
     degreeRepository.save(degree1);
 
@@ -122,6 +123,7 @@ public class LessonControllerDocTest {
       .degree("BACHELOR")
       .campusName("연세대학교")
       .lesson(lesson)
+      .user(user)
       .build();
     degreeRepository.save(degree2);
 
@@ -193,6 +195,7 @@ public class LessonControllerDocTest {
       .degree("MASTER")
       .campusName("서울대학교")
       .lesson(lesson)
+      .user(user)
       .build();
     degreeRepository.save(degree);
 
@@ -315,6 +318,7 @@ public class LessonControllerDocTest {
       .degree("MASTER")
       .campusName("서울대학교")
       .lesson(lesson)
+      .user(user)
       .build();
     degreeRepository.save(degree1);
 
@@ -322,6 +326,7 @@ public class LessonControllerDocTest {
       .degree("BACHELOR")
       .campusName("연세대학교")
       .lesson(lesson)
+      .user(user)
       .build();
     degreeRepository.save(degree2);
 
@@ -403,6 +408,7 @@ public class LessonControllerDocTest {
       .degree("MASTER")
       .campusName("서울대학교")
       .lesson(lesson)
+      .user(user)
       .build();
     degreeRepository.save(degree1);
 
@@ -410,6 +416,7 @@ public class LessonControllerDocTest {
       .degree("BACHELOR")
       .campusName("연세대학교")
       .lesson(lesson)
+      .user(user)
       .build();
     degreeRepository.save(degree2);
 
