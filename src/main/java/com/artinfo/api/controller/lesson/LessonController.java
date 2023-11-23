@@ -6,6 +6,7 @@ import com.artinfo.api.request.lesson.LessonSearch;
 import com.artinfo.api.response.lesson.LessonDetailResponse;
 import com.artinfo.api.response.lesson.LessonResponse;
 import com.artinfo.api.service.LessonService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class LessonController {
 
   //TODO 로그인 구현 후 추구 개선 필요
   @PostMapping("/lessons")
-  public void create(@RequestBody LessonCreate lessonCreate) {
+  public void create(@RequestBody @Valid LessonCreate lessonCreate) {
     lessonService.create(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"), lessonCreate);
   }
 
