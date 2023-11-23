@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 public class LessonEdit {
   //todo 추후 삭제 필요
   private UUID userId;
@@ -25,29 +24,15 @@ public class LessonEdit {
   private Map<String, List<String>> degrees;
 
   @Builder
-  public LessonEdit(UUID userId, String imageUrl, List<String> locations, String name, List<String> majors, String phone, Integer fee, String intro, Map<String, List<String>> degrees) {
+  public LessonEdit(UUID userId, String name, String imageUrl, List<String> locations, List<String> majors, String phone, Integer fee, String intro, Map<String, List<String>> degrees) {
     this.userId = userId;
+    this.name = name;
     this.imageUrl = imageUrl;
     this.locations = locations;
-    this.name = name;
     this.majors = majors;
     this.phone = phone;
     this.fee = fee;
     this.intro = intro;
     this.degrees = degrees;
   }
-//
-//  public static LessonEditor toEditor(LessonEdit lessonEdit) {
-//    return LessonEditor.builder()
-//      .lessonId(lessonEdit.getLessonId())
-//      .imageUrl(lessonEdit.getImageUrl())
-//      .locations(lessonEdit.getLocations())
-//      .name(lessonEdit.getName())
-//      .majors(lessonEdit.getMajors())
-//      .phone(lessonEdit.getPhone())
-//      .fee(lessonEdit.getFee())
-//      .intro(lessonEdit.getIntro())
-//      .degrees(lessonEdit.getDegrees())
-//      .build();
-//  }
 }

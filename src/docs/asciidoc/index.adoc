@@ -13,6 +13,24 @@ include::{snippets}/create-lesson/request-fields.adoc[]
 ==== 응답
 include::{snippets}/create-lesson/http-response.adoc[]
 
+=== 레슨 수정
+==== 요청
+include::{snippets}/edit-lesson/http-request.adoc[]
+include::{snippets}/edit-lesson/curl-request.adoc[]
+include::{snippets}/edit-lesson/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/edit-lesson/http-response.adoc[]
+
+=== 레슨 삭제
+==== 요청
+include::{snippets}/delete-lesson/http-request.adoc[]
+include::{snippets}/delete-lesson/curl-request.adoc[]
+include::{snippets}/delete-lesson/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/delete-lesson/http-response.adoc[]
+
 === 레슨 단건 조회
 ==== 요청
 include::{snippets}/get-lesson/http-request.adoc[]
