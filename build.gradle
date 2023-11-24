@@ -5,8 +5,14 @@ plugins {
 	id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
+ext {
+	apiVersion = "0.3.1"
+	asciidocVersion = "3.0.0"
+	snippetsDir = file('build/generated-snippets')
+}
+
 group = 'com'
-version = '0.0.1-SNAPSHOT'
+version = "${apiVersion}"
 
 java {
 	sourceCompatibility = '17'
@@ -21,11 +27,6 @@ configurations {
 
 repositories {
 	mavenCentral()
-}
-
-ext {
-	asciidocVersion = "3.0.0"
-	snippetsDir = file('build/generated-snippets')
 }
 
 dependencies {
@@ -78,7 +79,7 @@ tasks.named('test') {
 }
 
 bootJar {
-	archiveVersion = "0.3.1"
+	archiveVersion = "${apiVersion}"
 	dependsOn asciidoctor
 	copy {
 		from asciidoctor.outputDir
