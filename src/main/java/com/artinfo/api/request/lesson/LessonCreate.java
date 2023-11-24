@@ -38,13 +38,19 @@ public class LessonCreate {
   private List<Map<String, String>> degrees;
 
   public void validate() {
-    if (locations == null || locations.isEmpty()) {
+    if (userId == null) {
+      throw new InvalidRequest("userId", "유저 ID를 입력해 주세요.");
+    }
+    if (locations == null) {
       throw new InvalidRequest("locations", "레슨 가능 지역을 입력해 주세요.");
     }
-    if (majors == null || majors.isEmpty()) {
+    if (majors == null) {
       throw new InvalidRequest("majors", "전공을 입력해 주세요.");
     }
-    if (degrees == null || degrees.isEmpty()) {
+    if (fee == null) {
+      throw new InvalidRequest("fee", "레슨비를 입력해 주세요.");
+    }
+    if (degrees == null) {
       throw new InvalidRequest("degrees", "학위를 입력해 주세요.");
     }
   }

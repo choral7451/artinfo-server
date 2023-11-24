@@ -1,6 +1,7 @@
 package com.artinfo.api.controller;
 
 import com.artinfo.api.exception.ArtinfoException;
+import com.artinfo.api.exception.InvalidRequest;
 import com.artinfo.api.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,9 @@ public class ExceptionController {
         ErrorResponse body = ErrorResponse.builder()
           .code(String.valueOf(statusCode))
           .message(e.getMessage())
+          .validation(e.getValidation())
           .build();
+
 
       return ResponseEntity.status(statusCode)
           .body(body);

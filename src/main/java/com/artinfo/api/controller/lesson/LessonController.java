@@ -39,6 +39,8 @@ public class LessonController {
 
   @PutMapping("/lessons/{lessonId}")
   public void edit(@PathVariable(name = "lessonId") Long id, @RequestBody LessonEdit lessonEdit) {
+    lessonEdit.validate();
+
     lessonService.edit(id, lessonEdit);
   }
 

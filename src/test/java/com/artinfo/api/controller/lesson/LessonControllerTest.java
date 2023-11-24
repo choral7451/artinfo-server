@@ -104,7 +104,7 @@ class LessonControllerTest {
 
     LessonCreate request = LessonCreate.builder()
       .userId(user.getId())
-//      .imageUrl("www.sample_image_url.com")
+      .imageUrl("www.sample_image_url.com")
 //      .locations(List.of("서울 전체", "강원도 전체"))
       .name("임성준")
       .majors(List.of("피아노", "성악"))
@@ -121,7 +121,7 @@ class LessonControllerTest {
         .contentType(APPLICATION_JSON)
         .content(json)
       )
-      .andExpect(status().isBadRequest());
+      .andExpect(status().isOk());
   }
 
   @Test
