@@ -77,7 +77,7 @@ class LessonControllerTest {
       .phone("010-0000-0000")
       .fee(800000)
       .intro("안녕하세요")
-      .degrees(Map.of("MASTER", List.of("서울대학교", "연세대학교")))
+      .degrees(List.of(Map.of("MASTER", "서울대학교"), Map.of("BACHELOR", "연세대학교")))
       .build();
 
     String json = objectMapper.writeValueAsString(request);
@@ -88,6 +88,40 @@ class LessonControllerTest {
         .content(json)
       )
       .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("레슨 생성시 모든 필드는 필수 값이다.")
+  void createWithInvalidRequest() throws Exception {
+    // given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+
+    userRepository.save(user);
+
+    LessonCreate request = LessonCreate.builder()
+      .userId(user.getId())
+//      .imageUrl("www.sample_image_url.com")
+//      .locations(List.of("서울 전체", "강원도 전체"))
+      .name("임성준")
+      .majors(List.of("피아노", "성악"))
+      .phone("010-0000-0000")
+      .fee(800000)
+      .intro("안녕하세요")
+      .degrees(List.of(Map.of("MASTER", "서울대학교"), Map.of("BACHELOR", "연세대학교")))
+      .build();
+
+    String json = objectMapper.writeValueAsString(request);
+
+    //expected
+    mockMvc.perform(post("/lessons")
+        .contentType(APPLICATION_JSON)
+        .content(json)
+      )
+      .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -136,7 +170,7 @@ class LessonControllerTest {
       .phone("010-0000-0000")
       .fee(800000)
       .intro("안녕하세요")
-      .degrees(Map.of("MASTER", List.of("공맵", "딩동유")))
+      .degrees(List.of(Map.of("MASTER", "서울대학교"), Map.of("BACHELOR", "연세대학교")))
       .build();
 
     String json = objectMapper.writeValueAsString(request);
@@ -162,7 +196,7 @@ class LessonControllerTest {
     userRepository.save(user);
 
     Location location = Location.builder()
-      .name("서울 1")
+      .name("서울 전체")
       .build();
     locationRepository.save(location);
 

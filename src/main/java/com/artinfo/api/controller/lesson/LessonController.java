@@ -32,6 +32,8 @@ public class LessonController {
   //TODO 로그인 구현 후 추구 개선 필요
   @PostMapping("/lessons")
   public void create(@RequestBody @Valid LessonCreate lessonCreate) {
+    lessonCreate.validate();
+
     lessonService.create(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"), lessonCreate);
   }
 

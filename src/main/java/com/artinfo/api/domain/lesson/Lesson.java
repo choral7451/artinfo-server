@@ -29,7 +29,7 @@ public class Lesson {
   private String imageUrl;
 
   @JsonManagedReference
-  @ManyToMany(cascade = CascadeType.REMOVE)
+  @ManyToMany
   @JoinTable(
     name = "lessons_locations",
     joinColumns = @JoinColumn(name = "lesson_id"),
@@ -41,7 +41,7 @@ public class Lesson {
   private String name;
 
   @JsonManagedReference
-  @ManyToMany(cascade = CascadeType.REMOVE)
+  @ManyToMany
   @JoinTable(
     name = "lessons_majors",
     joinColumns = @JoinColumn(name = "lesson_id"),

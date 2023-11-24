@@ -120,12 +120,20 @@ public class LessonControllerDocTest {
     degreeRepository.save(degree1);
 
     Degree degree2 = Degree.builder()
-      .degree("BACHELOR")
+      .degree("MASTER")
       .campusName("연세대학교")
       .lesson(lesson)
       .user(user)
       .build();
     degreeRepository.save(degree2);
+
+    Degree degree3 = Degree.builder()
+      .degree("BACHELOR")
+      .campusName("연세대학교")
+      .lesson(lesson)
+      .user(user)
+      .build();
+    degreeRepository.save(degree3);
 
     //expected
     this.mockMvc.perform(RestDocumentationRequestBuilders.get("/lessons/{lessonId}", lesson.getId())
@@ -149,9 +157,8 @@ public class LessonControllerDocTest {
           fieldWithPath("majors").type(JsonFieldType.ARRAY).description("레슨 과목"),
           fieldWithPath("fee").type(JsonFieldType.NUMBER).description("레슨비"),
           fieldWithPath("intro").type(JsonFieldType.STRING).description("레슨 소개"),
-          fieldWithPath("degrees").type(JsonFieldType.OBJECT).description("학위:대학 목록"),
-          fieldWithPath("degrees.*").type(JsonFieldType.ARRAY).description("학위 목록"),
-          fieldWithPath("degrees.*[]").type(JsonFieldType.ARRAY).description("해당 학위에 대한 대학 목록")
+          fieldWithPath("degrees").type(JsonFieldType.ARRAY).description("학위:대학 목록"),
+          fieldWithPath("degrees[].*").type(JsonFieldType.STRING).description("학위 정보")
         )
       ));
   }
@@ -249,7 +256,7 @@ public class LessonControllerDocTest {
       .phone("010-0000-0000")
       .fee(800000)
       .intro("안녕하세요")
-      .degrees(Map.of("MASTER", List.of("서울대학교", "연세대학교")))
+      .degrees(List.of(Map.of("MASTER", "서울대학교"), Map.of("BACHELOR", "연세대학교")))
       .build();
 
     String json = objectMapper.writeValueAsString(request);
@@ -272,9 +279,8 @@ public class LessonControllerDocTest {
           fieldWithPath("phone").type(JsonFieldType.STRING).description("휴대폰 번호"),
           fieldWithPath("fee").type(JsonFieldType.NUMBER).description("레슨비"),
           fieldWithPath("intro").type(JsonFieldType.STRING).description("소개"),
-          fieldWithPath("degrees").type(JsonFieldType.OBJECT).description("학위:대학 목록"),
-          fieldWithPath("degrees.*").type(JsonFieldType.ARRAY).description("학위 목록"),
-          fieldWithPath("degrees.*[]").type(JsonFieldType.ARRAY).description("해당 학위에 대한 대학 목록")
+          fieldWithPath("degrees").type(JsonFieldType.ARRAY).description("학위:대학 목록"),
+          fieldWithPath("degrees[].*").type(JsonFieldType.STRING).description("학위 정보")
         )
       ));
   }
@@ -339,7 +345,7 @@ public class LessonControllerDocTest {
       .phone("010-0000-0000")
       .fee(800000)
       .intro("안녕하세요")
-      .degrees(Map.of("MASTER", List.of("서울대학교", "연세대학교")))
+      .degrees(List.of(Map.of("MASTER", "서울대학교"), Map.of("BACHELOR", "연세대학교")))
       .build();
 
     String json = objectMapper.writeValueAsString(request);
@@ -362,9 +368,8 @@ public class LessonControllerDocTest {
           fieldWithPath("phone").type(JsonFieldType.STRING).description("휴대폰 번호"),
           fieldWithPath("fee").type(JsonFieldType.NUMBER).description("레슨비"),
           fieldWithPath("intro").type(JsonFieldType.STRING).description("소개"),
-          fieldWithPath("degrees").type(JsonFieldType.OBJECT).description("학위:대학 목록"),
-          fieldWithPath("degrees.*").type(JsonFieldType.ARRAY).description("학위 목록"),
-          fieldWithPath("degrees.*[]").type(JsonFieldType.ARRAY).description("해당 학위에 대한 대학 목록")
+          fieldWithPath("degrees").type(JsonFieldType.ARRAY).description("학위:대학 목록"),
+          fieldWithPath("degrees[].*").type(JsonFieldType.STRING).description("학위 정보")
         )
       ));
   }

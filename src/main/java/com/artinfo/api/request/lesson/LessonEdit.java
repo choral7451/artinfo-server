@@ -29,10 +29,10 @@ public class LessonEdit {
 
   @NotBlank
   private String intro;
-  private Map<String, List<String>> degrees;
+  private List<Map<String, String>> degrees;
 
   @Builder
-  public LessonEdit(UUID userId, String name, String imageUrl, List<String> locations, List<String> majors, String phone, Integer fee, String intro, Map<String, List<String>> degrees) {
+  public LessonEdit(UUID userId, String name, String imageUrl, List<String> locations, List<String> majors, String phone, Integer fee, String intro, List<Map<String, String>> degrees) {
     this.userId = userId;
     this.name = name;
     this.imageUrl = imageUrl;

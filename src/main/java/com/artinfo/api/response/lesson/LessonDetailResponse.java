@@ -20,5 +20,5 @@ public class LessonDetailResponse {
   private final String phone;
   private final Integer fee;
   private final String intro;
-  private final Map<String, List<String>> degrees;
+  private final List<Map<String, String>> degrees;
 }

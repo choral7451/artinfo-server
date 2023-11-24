@@ -23,10 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,11 +55,13 @@ public class LessonService {
       .fee(lesson.getFee())
       .intro(lesson.getIntro())
       .degrees(lesson.getDegrees().stream()
-        .collect(Collectors.groupingBy(
-          Degree::getDegree,
-          Collectors.mapping(Degree::getCampusName, Collectors.toList())
-        ))
-      ).build();
+        .map(degree -> {
+          Map<String, String> map = new HashMap<>();
+          map.put(degree.getDegree(), degree.getCampusName());
+          return map;
+        }).collect(Collectors.toList()))
+      .build();
+
   }
 
   public List<LessonResponse> getList(LessonSearch lessonSearch) {
@@ -116,14 +115,18 @@ public class LessonService {
 
     lessonRepository.save(lesson);
 
-    List<Degree> degrees = lessonCreate.getDegrees().entrySet().stream()
-      .flatMap(entry -> entry.getValue().stream()
-        .map(campusName -> Degree.builder()
-          .degree(entry.getKey())
-          .campusName(campusName)
+    List<Degree> degrees = lessonCreate.getDegrees().stream()
+      .map(degreeMap -> {
+        String degreeType = degreeMap.keySet().iterator().next();
+        String campusName = degreeMap.get(degreeType);
+
+        return Degree.builder()
           .user(user)
           .lesson(lesson)
-          .build()))
+          .degree(degreeType)
+          .campusName(campusName)
+          .build();
+      })
       .collect(Collectors.toList());
 
     degreeRepository.saveAll(degrees);
@@ -162,14 +165,18 @@ public class LessonService {
       }
     }
 
-    List<Degree> degrees = lessonEdit.getDegrees().entrySet().stream()
-      .flatMap(entry -> entry.getValue().stream()
-        .map(campusName -> Degree.builder()
-          .degree(entry.getKey())
-          .campusName(campusName)
+    List<Degree> degrees = lessonEdit.getDegrees().stream()
+      .map(degreeMap -> {
+        String degreeType = degreeMap.keySet().iterator().next();
+        String campusName = degreeMap.get(degreeType);
+
+        return Degree.builder()
           .user(user)
           .lesson(lesson)
-          .build()))
+          .degree(degreeType)
+          .campusName(campusName)
+          .build();
+      })
       .collect(Collectors.toList());
 
     degreeRepository.saveAll(degrees);
