@@ -121,7 +121,7 @@ class LessonControllerTest {
         .contentType(APPLICATION_JSON)
         .content(json)
       )
-      .andExpect(status().isOk());
+      .andExpect(status().isBadRequest());
   }
 
   @Test

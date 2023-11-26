@@ -3,6 +3,17 @@
 :source-highlighter: highlightjs
 :toc: left
 
+== 유저
+=== 유저 단건 조회
+==== 요청
+include::{snippets}/get-user/http-request.adoc[]
+include::{snippets}/get-user/curl-request.adoc[]
+include::{snippets}/get-user/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-user/http-response.adoc[]
+include::{snippets}/get-user/response-fields.adoc[]
+
 == 레슨
 === 레슨 생성
 ==== 요청

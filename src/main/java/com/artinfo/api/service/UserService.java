@@ -1,6 +1,7 @@
 package com.artinfo.api.service;
 
 import com.artinfo.api.domain.User;
+import com.artinfo.api.domain.lesson.Lesson;
 import com.artinfo.api.exception.UserNotFound;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.response.UserResponse;
@@ -8,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,6 +28,7 @@ public class UserService {
       .iconImageUrl(user.getIconImageUrl())
       .commentCnt(user.getCommentCnt())
       .articleCnt(user.getArticleCnt())
+      .lessonId(Optional.ofNullable(user.getLesson()).map(Lesson::getId).orElse(null))
       .isTeacher(user.isTeacher())
       .build();
   }
