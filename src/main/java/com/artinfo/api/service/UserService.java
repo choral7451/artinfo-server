@@ -1,6 +1,7 @@
 package com.artinfo.api.service;
 
 import com.artinfo.api.domain.User;
+import com.artinfo.api.domain.enums.AuthenticationType;
 import com.artinfo.api.domain.lesson.Lesson;
 import com.artinfo.api.exception.UserNotFound;
 import com.artinfo.api.repository.user.UserRepository;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
+  private UserRepository repo;
   private final UserRepository userRepository;
   public UserResponse get(UUID id) {
     User user = userRepository.findById(id)
@@ -31,5 +33,16 @@ public class UserService {
       .lessonId(Optional.ofNullable(user.getLesson()).map(Lesson::getId).orElse(null))
       .isTeacher(user.isTeacher())
       .build();
+  }
+
+
+
+  public void editAuthenticationType(String email, String oauth2ClientName) {
+    User user = userRepository.findByEmail(email)
+      .orElseThrow(UserNotFound::new);
+
+    AuthenticationType authType = AuthenticationType.valueOf(oauth2ClientName.toUpperCase());
+
+    user.editAuthType(authType);
   }
 }

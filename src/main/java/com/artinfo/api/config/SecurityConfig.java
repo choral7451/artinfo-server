@@ -2,12 +2,11 @@ package com.artinfo.api.config;
 
 
 import com.artinfo.api.config.filter.EmailPasswordAuthFilter;
-import com.artinfo.api.config.handler.Http401Handler;
-import com.artinfo.api.config.handler.Http403Handler;
-import com.artinfo.api.config.handler.LoginFailHandler;
-import com.artinfo.api.config.handler.LoginSuccessHandler;
+import com.artinfo.api.config.handler.*;
 import com.artinfo.api.domain.User;
 import com.artinfo.api.repository.user.UserRepository;
+import com.artinfo.api.service.AuthService;
+import com.artinfo.api.service.CustomOauth2Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +30,8 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
+  private final CustomOauth2Service customOauth2Service;
+  private final OAuthLoginSuccessHandler oauthLoginSuccessHandler;
   private final ObjectMapper objectMapper;
   private final UserRepository userRepository;
 
@@ -51,6 +51,15 @@ public class SecurityConfig {
       .exceptionHandling(e -> {
         e.accessDeniedHandler(new Http403Handler(objectMapper));
         e.authenticationEntryPoint(new Http401Handler(objectMapper));
+      })
+      .oauth2Login(e -> {
+        e.loginPage("/auth/login/social");
+        e.defaultSuccessUrl("/login/success");
+        e.failureUrl("/login/error");
+        e.userInfoEndpoint(ev -> {
+          ev.userService(customOauth2Service);
+        });
+        e.successHandler(oauthLoginSuccessHandler);
       })
       .csrf(AbstractHttpConfigurer::disable)
       .build();

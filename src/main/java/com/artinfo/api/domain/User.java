@@ -1,5 +1,6 @@
 package com.artinfo.api.domain;
 
+import com.artinfo.api.domain.enums.AuthenticationType;
 import com.artinfo.api.domain.lesson.Lesson;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -33,6 +34,9 @@ public class User {
   @Column(name = "icon_image_url")
   private String iconImageUrl;
 
+  @Column(name = "auth_type")
+  private AuthenticationType authType;
+
   @Column(name = "article_cnt", columnDefinition = "smalint")
   private short articleCnt = 0;
 
@@ -62,5 +66,8 @@ public class User {
 
   public void editIsTeacher(Boolean isTeacher) {
     this.isTeacher = isTeacher;
+  }
+  public void editAuthType(AuthenticationType authType) {
+    this.authType = authType;
   }
 }
