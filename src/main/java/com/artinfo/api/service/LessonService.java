@@ -165,6 +165,8 @@ public class LessonService {
       }
     }
 
+    degreeRepository.deleteByUserId(user.getId());
+
     List<Degree> degrees = lessonEdit.getDegrees().stream()
       .map(degreeMap -> {
         String degreeType = degreeMap.keySet().iterator().next();

@@ -5,7 +5,6 @@ import com.artinfo.api.config.filter.EmailPasswordAuthFilter;
 import com.artinfo.api.config.handler.*;
 import com.artinfo.api.domain.User;
 import com.artinfo.api.repository.user.UserRepository;
-import com.artinfo.api.service.AuthService;
 import com.artinfo.api.service.CustomOauth2Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -52,15 +51,15 @@ public class SecurityConfig {
         e.accessDeniedHandler(new Http403Handler(objectMapper));
         e.authenticationEntryPoint(new Http401Handler(objectMapper));
       })
-      .oauth2Login(e -> {
-        e.loginPage("/auth/login/social");
-        e.defaultSuccessUrl("/login/success");
-        e.failureUrl("/login/error");
-        e.userInfoEndpoint(ev -> {
-          ev.userService(customOauth2Service);
-        });
-        e.successHandler(oauthLoginSuccessHandler);
-      })
+//      .oauth2Login(e -> {
+//        e.loginPage("/auth/login/social");
+//        e.defaultSuccessUrl("/login/success");
+//        e.failureUrl("/login/error");
+//        e.userInfoEndpoint(ev -> {
+//          ev.userService(customOauth2Service);
+//        });
+//        e.successHandler(oauthLoginSuccessHandler);
+//      })
       .csrf(AbstractHttpConfigurer::disable)
       .build();
   }

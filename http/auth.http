@@ -15,7 +15,7 @@ POST http://localhost:8080/auth/login/email
 Content-Type: application/json
 
 {
-  "email": "artinfokorea2022@gmail.com",
+  "email": "artinfokorea20222@gmail.com",
   "password": "a123456!"
 }
 

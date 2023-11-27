@@ -1,5 +1,6 @@
 package com.artinfo.api.controller.auth;
 
+import com.artinfo.api.domain.enums.AuthenticationType;
 import com.artinfo.api.request.Signup;
 import com.artinfo.api.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class AuthController {
 
   @PostMapping("/auth/signup")
   public void signup(@RequestBody Signup signup) {
-    authService.signup(signup);
+    authService.signup(signup, AuthenticationType.EMAIL);
   }
 
   @PostMapping("/auth/login/social")

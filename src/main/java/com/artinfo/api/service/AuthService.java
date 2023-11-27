@@ -1,6 +1,7 @@
 package com.artinfo.api.service;
 
 import com.artinfo.api.domain.User;
+import com.artinfo.api.domain.enums.AuthenticationType;
 import com.artinfo.api.exception.AlreadyExistsEmailException;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.request.Signup;
@@ -16,7 +17,7 @@ public class AuthService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
-  public void signup(Signup signup) {
+  public void signup(Signup signup, AuthenticationType authType) {
     Optional<User> userOptional = userRepository.findByEmail(signup.getEmail());
     if (userOptional.isPresent()) {
       throw new AlreadyExistsEmailException();
@@ -28,6 +29,7 @@ public class AuthService {
       .name(signup.getName())
       .password(encryptedPassword)
       .email(signup.getEmail())
+      .authType(authType)
       .build();
 
     userRepository.save(user);

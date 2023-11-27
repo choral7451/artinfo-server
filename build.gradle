@@ -6,7 +6,7 @@ plugins {
 }
 
 ext {
-	apiVersion = "0.4.0"
+	apiVersion = "0.4.2"
 	asciidocVersion = "3.0.0"
 	snippetsDir = file('build/generated-snippets')
 }
@@ -58,6 +58,8 @@ dependencies {
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
 
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	implementation 'net.nurigo:sdk:4.3.0'
 }
 
 test {

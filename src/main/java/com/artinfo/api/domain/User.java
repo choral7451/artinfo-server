@@ -57,11 +57,12 @@ public class User {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public User(String name, String email, String password) {
+  public User(String name, String email, String password, AuthenticationType authType) {
     this.name = name;
     this.email = email;
     this.password = password;
     this.createdAt = LocalDateTime.now();
+    this.authType = authType;
   }
 
   public void editIsTeacher(Boolean isTeacher) {
