@@ -20,9 +20,4 @@ public class AuthController {
   public void signup(@RequestBody Signup signup) {
     authService.signup(signup, AuthenticationType.EMAIL);
   }
-
-  @PostMapping("/auth/login/social")
-  public void loginKakao(@RequestBody Signup signup) {
-
-  }
 }

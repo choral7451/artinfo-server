@@ -8,6 +8,7 @@ import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.service.CustomOauth2Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +26,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
@@ -51,15 +53,15 @@ public class SecurityConfig {
         e.accessDeniedHandler(new Http403Handler(objectMapper));
         e.authenticationEntryPoint(new Http401Handler(objectMapper));
       })
-//      .oauth2Login(e -> {
+      .oauth2Login(e -> {
 //        e.loginPage("/auth/login/social");
-//        e.defaultSuccessUrl("/login/success");
-//        e.failureUrl("/login/error");
-//        e.userInfoEndpoint(ev -> {
-//          ev.userService(customOauth2Service);
-//        });
-//        e.successHandler(oauthLoginSuccessHandler);
-//      })
+        e.userInfoEndpoint(event -> {
+          event.userService(customOauth2Service);
+        });
+        e.successHandler(oauthLoginSuccessHandler);
+        e.defaultSuccessUrl("http://localhost:3000/login", true);
+        e.failureUrl("http://localhost:3000/error");
+      })
       .csrf(AbstractHttpConfigurer::disable)
       .build();
   }

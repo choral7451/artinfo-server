@@ -3,10 +3,11 @@ package com.artinfo.api.domain;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
-public class CustomOAuth2User implements OAuth2User {
+public class CustomOAuth2User implements OAuth2User, Serializable {
   private String oauth2ClientName;
   private OAuth2User oauth2User;
 
@@ -27,7 +28,6 @@ public class CustomOAuth2User implements OAuth2User {
 
   @Override
   public String getName() {
-    System.out.println(oauth2User.<String>getAttribute("email"));
     return oauth2User.getAttribute("name");
   }
 

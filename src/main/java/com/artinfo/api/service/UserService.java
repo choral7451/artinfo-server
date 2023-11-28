@@ -8,11 +8,13 @@ import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.response.UserResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -40,6 +42,7 @@ public class UserService {
   public void editAuthenticationType(String email, String oauth2ClientName) {
     User user = userRepository.findByEmail(email)
       .orElseThrow(UserNotFound::new);
+    log.info(">>>>>>>>{}", oauth2ClientName);
 
     AuthenticationType authType = AuthenticationType.valueOf(oauth2ClientName.toUpperCase());
 
