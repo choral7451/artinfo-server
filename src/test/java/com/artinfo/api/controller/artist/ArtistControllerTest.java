@@ -38,12 +38,14 @@ public class ArtistControllerTest {
   void getArtistList() throws Exception {
     //given
     Artist artist1 = Artist.builder()
-      .name("서울시립교향악단")
+      .koreanName("서울시립교향악단")
+      .englishName("SPO")
       .mainImageUrl("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/seoul_philharmonic_orchestra.png")
       .build();
 
     Artist artist2 = Artist.builder()
-      .name("조성진")
+      .koreanName("조성진")
+      .englishName("Seong Jin Cho")
       .mainImageUrl("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/seongjin_cho.jpeg")
       .build();
 
@@ -55,9 +57,11 @@ public class ArtistControllerTest {
         .param("size", "2")
         .contentType(APPLICATION_JSON))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$[0].name").value("조성진"))
+      .andExpect(jsonPath("$[0].koreanName").value("조성진"))
+      .andExpect(jsonPath("$[0].englishName").value("Seong Jin Cho"))
       .andExpect(jsonPath("$[0].mainImageUrl").value("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/seongjin_cho.jpeg"))
-      .andExpect(jsonPath("$[1].name").value("서울시립교향악단"))
+      .andExpect(jsonPath("$[1].koreanName").value("서울시립교향악단"))
+      .andExpect(jsonPath("$[1].englishName").value("SPO"))
       .andExpect(jsonPath("$[1].mainImageUrl").value("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/seoul_philharmonic_orchestra.png"))
       .andDo(print());
   }

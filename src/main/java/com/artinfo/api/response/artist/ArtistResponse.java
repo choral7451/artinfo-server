@@ -6,12 +6,14 @@ import lombok.Getter;
 @Getter
 public class ArtistResponse {
   private final Long id;
-  private final String  name;
+  private final String koreanName;
+  private final String englishName;
   private final String mainImageUrl;
 
   public ArtistResponse(Artist artist) {
     this.id = artist.getId();
-    this.name = artist.getName();
+    this.koreanName = artist.getKoreanName();
+    this.englishName = artist.getEnglishName();
     this.mainImageUrl = artist.getMainImageUrl();
   }
 }

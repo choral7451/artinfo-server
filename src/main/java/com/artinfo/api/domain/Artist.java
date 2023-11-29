@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,8 +19,11 @@ public class Artist {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "name")
-  private String name;
+  @Column(name = "korean_name")
+  private String koreanName;
+
+  @Column(name = "english_name")
+  private String englishName;
 
   @Column(name = "main_image_url", columnDefinition = "text")
   private String mainImageUrl;
@@ -28,9 +32,13 @@ public class Artist {
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
   private LocalDateTime createdAt = LocalDateTime.now();
 
+  @OneToMany(mappedBy = "artist")
+  private List<Concert> concerts;
+
   @Builder
-  public Artist(String name, String mainImageUrl) {
-    this.name = name;
+  public Artist(String koreanName, String englishName, String mainImageUrl) {
+    this.koreanName = koreanName;
+    this.englishName = englishName;
     this.mainImageUrl = mainImageUrl;
   }
 

@@ -1,6 +1,8 @@
-package com.artinfo.api.controller.artist;
+package com.artinfo.api.controller.concert;
 
 import com.artinfo.api.domain.Artist;
+import com.artinfo.api.domain.Concert;
+import com.artinfo.api.domain.enums.ConcertCategory;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +20,13 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "api-artinfokorea.com", uriPort = 443)
 @ExtendWith(RestDocumentationExtension.class)
-public class ArtistControllerDocTest {
+public class ConcertControllerDocTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -51,48 +53,56 @@ public class ArtistControllerDocTest {
   }
 
   @Test
-  @DisplayName("아티스트 목록 조회")
+  @DisplayName("아티스트 공연 목록 조회")
   void getArtistList() throws Exception {
     //given
-    Artist artist1 = Artist.builder()
+    Artist artist = Artist.builder()
       .koreanName("서울시립교향악단")
       .englishName("SPO")
       .mainImageUrl("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/seoul_philharmonic_orchestra.png")
       .build();
+    artistRepository.save(artist);
 
-    Artist artist2 = Artist.builder()
-      .koreanName("조성진")
-      .englishName("Seong Jin Cho")
-      .mainImageUrl("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/seongjin_cho.jpeg")
+    Concert concert1 = Concert.builder()
+      .title("제목")
+      .contents("내용")
+      .category(ConcertCategory.ENSEMBLE)
+      .location("롯데콘서트홀")
+      .artist(artist)
+      .isActive(false)
+      .performanceTime(LocalDateTime.now())
       .build();
 
-    Artist artist3 = Artist.builder()
-      .koreanName("손열음")
-      .englishName("Yeol Eum Son")
-      .mainImageUrl("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/yeoleum_son.jpeg")
+    Concert concert2 = Concert.builder()
+      .title("제목2")
+      .contents("내용2")
+      .category(ConcertCategory.SOLO)
+      .location("롯데콘서트홀")
+      .artist(artist)
+      .isActive(false)
+      .performanceTime(LocalDateTime.now())
       .build();
 
-    artistRepository.saveAll(List.of(artist1, artist2, artist3));
+    concertRepository.saveAll(List.of(concert1, concert2));
 
     //expected
-    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/artists?page=1&size=2")
+    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/concerts/artist/{artistId}", artist.getId())
         .accept(MediaType.APPLICATION_JSON)
       )
       .andExpect(status().isOk())
-      .andDo(document("get-artists",
+      .andDo(document("get-concerts-by-artistId",
         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
-        queryParameters(
-          parameterWithName("page").description("페이지 번호").optional()
-            .attributes(key("type").value("Number")),
-          parameterWithName("size").description("아티스트 조회 개수").optional()
+        pathParameters(
+          parameterWithName("artistId").description("아티스트 번호")
             .attributes(key("type").value("Number"))
         ),
         responseFields(
-          fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("아티스트 ID"),
-          fieldWithPath("[].koreanName").type(JsonFieldType.STRING).description("한글 이름"),
-          fieldWithPath("[].englishName").type(JsonFieldType.STRING).description("영어 이름"),
-          fieldWithPath("[].mainImageUrl").type(JsonFieldType.STRING).description("메인 이미지 URL")
+          fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("콘서트 ID"),
+          fieldWithPath("[].title").type(JsonFieldType.STRING).description("제목"),
+          fieldWithPath("[].location").type(JsonFieldType.STRING).description("연주 장소"),
+          fieldWithPath("[].performanceTime").type(JsonFieldType.STRING).description("연주 시간"),
+          fieldWithPath("[].isActive").type(JsonFieldType.BOOLEAN).description("활성화 상태")
         )
       ));
   }
