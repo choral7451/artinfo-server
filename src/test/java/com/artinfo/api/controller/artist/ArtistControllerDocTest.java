@@ -23,8 +23,7 @@ import java.util.List;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,6 +47,38 @@ public class ArtistControllerDocTest {
   void clean() {
     concertRepository.deleteAll();
     artistRepository.deleteAll();
+  }
+
+  @Test
+  @DisplayName("아티스트 단건 조회")
+  void get() throws Exception {
+    //given
+    Artist artist = Artist.builder()
+      .koreanName("서울시립교향악단")
+      .englishName("SPO")
+      .mainImageUrl("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/seoul_philharmonic_orchestra.png")
+      .build();
+    artistRepository.save(artist);
+
+    //expected
+    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/artists/{artistId}", artist.getId())
+        .accept(MediaType.APPLICATION_JSON)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("get-artist",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+        pathParameters(
+          parameterWithName("artistId").description("아티스트 번호")
+            .attributes(key("type").value("Number"))
+        ),
+        responseFields(
+          fieldWithPath("id").type(JsonFieldType.NUMBER).description("아티스트 ID"),
+          fieldWithPath("koreanName").type(JsonFieldType.STRING).description("한글 이름"),
+          fieldWithPath("englishName").type(JsonFieldType.STRING).description("영어 이름"),
+          fieldWithPath("mainImageUrl").type(JsonFieldType.STRING).description("메인 이미지 URL")
+        )
+      ));
   }
 
   @Test
