@@ -16,7 +16,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Table(name = "profiles")
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

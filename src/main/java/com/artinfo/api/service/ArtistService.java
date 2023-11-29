@@ -30,6 +30,6 @@ public class ArtistService {
     Artist artist = artistRepository.findById(artistId)
       .orElseThrow(ArtistNotFound::new);
 
-    return new ArtistDetailResponse(artist);
+    return ArtistDetailResponse.fromArtist(artist);
   }
 }

@@ -74,6 +74,15 @@ include::{snippets}/get-recruit_job/http-response.adoc[]
 include::{snippets}/get-recruit_job/response-fields.adoc[]
 
 == 아티스트
+=== 아티스트 단건 조회
+==== 요청
+include::{snippets}/get-artist/http-request.adoc[]
+include::{snippets}/get-artist/curl-request.adoc[]
+include::{snippets}/get-artist/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-artist/http-response.adoc[]
+include::{snippets}/get-artist/response-fields.adoc[]
 === 아티스트 목록 조회
 ==== 요청
 include::{snippets}/get-artists/http-request.adoc[]
@@ -94,3 +103,14 @@ include::{snippets}/get-concerts-by-artistId/path-parameters.adoc[]
 ==== 응답
 include::{snippets}/get-concerts-by-artistId/http-response.adoc[]
 include::{snippets}/get-concerts-by-artistId/response-fields.adoc[]
+
+== 유튜브
+=== 아티스트 유튜브 목록 조회
+==== 요청
+include::{snippets}/get-youtubes-by-artistId/http-request.adoc[]
+include::{snippets}/get-youtubes-by-artistId/curl-request.adoc[]
+include::{snippets}/get-youtubes-by-artistId/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-youtubes-by-artistId/http-response.adoc[]
+include::{snippets}/get-youtubes-by-artistId/response-fields.adoc[]

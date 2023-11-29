@@ -35,6 +35,9 @@ public class Artist {
   @OneToMany(mappedBy = "artist")
   private List<Concert> concerts;
 
+  @OneToMany(mappedBy = "artist")
+  private List<Youtube> youtubes;
+
   @Builder
   public Artist(String koreanName, String englishName, String mainImageUrl) {
     this.koreanName = koreanName;

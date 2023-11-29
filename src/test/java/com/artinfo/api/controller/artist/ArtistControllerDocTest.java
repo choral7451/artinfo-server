@@ -3,6 +3,7 @@ package com.artinfo.api.controller.artist;
 import com.artinfo.api.domain.Artist;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;
+import com.artinfo.api.repository.youtube.YoutubeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,9 +43,13 @@ public class ArtistControllerDocTest {
   @Autowired
   private ConcertRepository concertRepository;
 
+  @Autowired
+  private YoutubeRepository youtubueRepository;
+
 
   @BeforeEach
   void clean() {
+    youtubueRepository.deleteAll();
     concertRepository.deleteAll();
     artistRepository.deleteAll();
   }

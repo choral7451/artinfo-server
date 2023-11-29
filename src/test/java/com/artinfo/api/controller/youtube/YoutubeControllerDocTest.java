@@ -1,10 +1,16 @@
-package com.artinfo.api.controller.concert;
+package com.artinfo.api.controller.youtube;
 
 import com.artinfo.api.domain.Artist;
-import com.artinfo.api.domain.Concert;
-import com.artinfo.api.domain.enums.ConcertCategory;
+import com.artinfo.api.domain.Youtube;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;
+import com.artinfo.api.repository.lesson.LessonRepository;
+import com.artinfo.api.repository.lesson.LocationRepository;
+import com.artinfo.api.repository.lesson.MajorRepository;
+import com.artinfo.api.repository.user.DegreeRepository;
+import com.artinfo.api.repository.user.UserRepository;
+import com.artinfo.api.repository.youtube.YoutubeRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +32,8 @@ import java.util.List;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "api-artinfokorea.com", uriPort = 443)
 @ExtendWith(RestDocumentationExtension.class)
-public class ConcertControllerDocTest {
+public class YoutubeControllerDocTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -43,18 +50,21 @@ public class ConcertControllerDocTest {
   private ArtistRepository artistRepository;
 
   @Autowired
-  private ConcertRepository concertRepository;
+  private YoutubeRepository youtubeRepository;
 
+  @Autowired
+  private ConcertRepository concertRepository;
 
   @BeforeEach
   void clean() {
     concertRepository.deleteAll();
+    youtubeRepository.deleteAll();
     artistRepository.deleteAll();
   }
 
   @Test
-  @DisplayName("아티스트 공연 목록 조회")
-  void getArtistConcertList() throws Exception {
+  @DisplayName("아티스트 유튜브 목록 조회")
+  void getArtistYoutubeList() throws Exception {
     //given
     Artist artist = Artist.builder()
       .koreanName("서울시립교향악단")
@@ -63,34 +73,27 @@ public class ConcertControllerDocTest {
       .build();
     artistRepository.save(artist);
 
-    Concert concert1 = Concert.builder()
-      .title("제목")
-      .contents("내용")
-      .category(ConcertCategory.ENSEMBLE)
-      .location("롯데콘서트홀")
+    Youtube youtube1 = Youtube.builder()
+      .title("제목1")
+      .linkUrl("https://www.youtube.com/watch?v=9u6W8n9p8SY&t=3s")
       .artist(artist)
-      .isActive(false)
-      .performanceTime(LocalDateTime.now())
+      .publishedAt(LocalDateTime.now())
       .build();
 
-    Concert concert2 = Concert.builder()
+    Youtube youtube2 = Youtube.builder()
       .title("제목2")
-      .contents("내용2")
-      .category(ConcertCategory.SOLO)
-      .location("롯데콘서트홀")
+      .linkUrl("https://www.youtube.com/watch?v=9u6W8n9p8SY&t=3s")
       .artist(artist)
-      .isActive(false)
-      .performanceTime(LocalDateTime.now())
+      .publishedAt(LocalDateTime.now())
       .build();
-
-    concertRepository.saveAll(List.of(concert1, concert2));
+    youtubeRepository.saveAll(List.of(youtube1, youtube2));
 
     //expected
-    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/concerts/artist/{artistId}", artist.getId())
+    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/youtubes/artist/{artistId}", artist.getId())
         .accept(MediaType.APPLICATION_JSON)
       )
       .andExpect(status().isOk())
-      .andDo(document("get-concerts-by-artistId",
+      .andDo(document("get-youtubes-by-artistId",
         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
         pathParameters(
@@ -98,11 +101,11 @@ public class ConcertControllerDocTest {
             .attributes(key("type").value("Number"))
         ),
         responseFields(
-          fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("콘서트 ID"),
-          fieldWithPath("[].title").type(JsonFieldType.STRING).description("제목"),
-          fieldWithPath("[].location").type(JsonFieldType.STRING).description("연주 장소"),
-          fieldWithPath("[].performanceTime").type(JsonFieldType.STRING).description("연주 시간"),
-          fieldWithPath("[].isActive").type(JsonFieldType.BOOLEAN).description("활성화 상태")
+          fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("유튜브 ID"),
+          fieldWithPath("[].artistName").type(JsonFieldType.STRING).description("아티스트 이름"),
+          fieldWithPath("[].title").type(JsonFieldType.STRING).description("유튜브 제목"),
+          fieldWithPath("[].linkUrl").type(JsonFieldType.STRING).description("링크 주소"),
+          fieldWithPath("[].publishedAt").type(JsonFieldType.STRING).description("발행 시간")
         )
       ));
   }
