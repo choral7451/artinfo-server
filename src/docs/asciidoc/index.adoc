@@ -72,3 +72,14 @@ include::{snippets}/get-recruit_job/path-parameters.adoc[]
 ==== 응답
 include::{snippets}/get-recruit_job/http-response.adoc[]
 include::{snippets}/get-recruit_job/response-fields.adoc[]
+
+== 아티스트
+=== 아티스트 목록 조회
+==== 요청
+include::{snippets}/get-artists/http-request.adoc[]
+include::{snippets}/get-artists/curl-request.adoc[]
+include::{snippets}/get-artists/query-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-artists/http-response.adoc[]
+include::{snippets}/get-artists/response-fields.adoc[]
