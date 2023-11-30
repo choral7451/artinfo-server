@@ -4,13 +4,9 @@ import com.artinfo.api.domain.Artist;
 import com.artinfo.api.domain.Youtube;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;
-import com.artinfo.api.repository.lesson.LessonRepository;
-import com.artinfo.api.repository.lesson.LocationRepository;
-import com.artinfo.api.repository.lesson.MajorRepository;
-import com.artinfo.api.repository.user.DegreeRepository;
-import com.artinfo.api.repository.user.UserRepository;
+import com.artinfo.api.repository.feed.FeedRepository;
+import com.artinfo.api.repository.image.ImageRepository;
 import com.artinfo.api.repository.youtube.YoutubeRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +22,7 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,8 +52,16 @@ public class YoutubeControllerDocTest {
   @Autowired
   private ConcertRepository concertRepository;
 
+  @Autowired
+  private ImageRepository imageRepository;
+
+  @Autowired
+  private FeedRepository feedRepository;
+
   @BeforeEach
   void clean() {
+    imageRepository.deleteAll();
+    feedRepository.deleteAll();
     concertRepository.deleteAll();
     youtubeRepository.deleteAll();
     artistRepository.deleteAll();

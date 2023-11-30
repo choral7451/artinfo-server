@@ -1,6 +1,5 @@
 package com.artinfo.api.domain;
 
-import com.artinfo.api.domain.enums.AuthenticationType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

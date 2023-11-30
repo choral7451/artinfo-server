@@ -4,9 +4,12 @@ import com.artinfo.api.domain.Location;
 import com.artinfo.api.domain.Major;
 import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.lesson.Lesson;
+import com.artinfo.api.repository.feed.FeedRepository;
+import com.artinfo.api.repository.image.ImageRepository;
 import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.repository.lesson.LocationRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
+import com.artinfo.api.repository.user.DegreeRepository;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.request.lesson.LessonCreate;
 import com.artinfo.api.request.lesson.LessonEdit;
@@ -30,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 class LessonControllerTest {
+
   @Autowired
   private MockMvc mockMvc;
 
@@ -48,11 +52,23 @@ class LessonControllerTest {
   @Autowired
   private MajorRepository majorRepository;
 
+  @Autowired
+  private DegreeRepository degreeRepository;
+
+  @Autowired
+  private FeedRepository feedRepository;
+
+  @Autowired
+  private ImageRepository imageRepository;
+
   @BeforeEach
   void clean() {
-    locationRepository.deleteAll();
+    imageRepository.deleteAll();
     majorRepository.deleteAll();
     lessonRepository.deleteAll();
+    locationRepository.deleteAll();
+    feedRepository.deleteAll();
+    degreeRepository.deleteAll();
     userRepository.deleteAll();
   }
 

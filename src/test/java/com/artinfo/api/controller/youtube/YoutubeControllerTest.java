@@ -4,6 +4,8 @@ import com.artinfo.api.domain.Artist;
 import com.artinfo.api.domain.Youtube;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;
+import com.artinfo.api.repository.feed.FeedRepository;
+import com.artinfo.api.repository.image.ImageRepository;
 import com.artinfo.api.repository.youtube.YoutubeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,8 +40,16 @@ public class YoutubeControllerTest {
   @Autowired
   private ConcertRepository concertRepository;
 
+  @Autowired
+  private ImageRepository imageRepository;
+
+  @Autowired
+  private FeedRepository feedRepository;
+
   @BeforeEach
   void clean() {
+    imageRepository.deleteAll();
+    feedRepository.deleteAll();
     concertRepository.deleteAll();
     youtubeRepository.deleteAll();
     artistRepository.deleteAll();

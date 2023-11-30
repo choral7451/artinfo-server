@@ -5,6 +5,8 @@ import com.artinfo.api.domain.Location;
 import com.artinfo.api.domain.Major;
 import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.lesson.Lesson;
+import com.artinfo.api.repository.feed.FeedRepository;
+import com.artinfo.api.repository.image.ImageRepository;
 import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.repository.lesson.LocationRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
@@ -46,9 +48,6 @@ public class UserControllerDocTest {
   private MockMvc mockMvc;
 
   @Autowired
-  private ObjectMapper objectMapper;
-
-  @Autowired
   private UserRepository userRepository;
 
   @Autowired
@@ -63,13 +62,21 @@ public class UserControllerDocTest {
   @Autowired
   private DegreeRepository degreeRepository;
 
+  @Autowired
+  private ImageRepository imageRepository;
+
+  @Autowired
+  private FeedRepository feedRepository;
+
   @BeforeEach
   void clean() {
-    userRepository.deleteAll();
+    imageRepository.deleteAll();
+    feedRepository.deleteAll();
     majorRepository.deleteAll();
     lessonRepository.deleteAll();
     locationRepository.deleteAll();
     degreeRepository.deleteAll();
+    userRepository.deleteAll();
   }
 
   @Test

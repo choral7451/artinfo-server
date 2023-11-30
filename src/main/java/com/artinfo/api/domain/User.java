@@ -52,6 +52,9 @@ public class User {
   @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
   private List<Degree> degrees;
 
+  @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+  private List<Feed> feeds;
+
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
   private LocalDateTime createdAt = LocalDateTime.now();

@@ -1,17 +1,11 @@
 package com.artinfo.api.controller.feed;
 
 import com.artinfo.api.domain.*;
-import com.artinfo.api.domain.lesson.Lesson;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.feed.FeedRepository;
 import com.artinfo.api.repository.image.ImageRepository;
-import com.artinfo.api.repository.lesson.LessonRepository;
-import com.artinfo.api.repository.lesson.LocationRepository;
-import com.artinfo.api.repository.lesson.MajorRepository;
-import com.artinfo.api.repository.user.DegreeRepository;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.repository.youtube.YoutubeRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,7 +53,6 @@ public class FeedControllerDocTest {
 
   @Autowired
   private YoutubeRepository youtubeRepository;
-
 
   @BeforeEach
   void clean() {
