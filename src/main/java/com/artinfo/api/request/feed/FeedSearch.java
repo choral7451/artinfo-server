@@ -1,5 +1,6 @@
 package com.artinfo.api.request.feed;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ public class FeedSearch {
 
   private static final int MAX_SIZE = 2000;
 
+  @NotBlank(message = "아티스트 ID를 입력해 주세요.")
   private Long artistId;
   private Integer page = 1;
   private Integer size = 20;

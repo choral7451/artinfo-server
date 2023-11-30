@@ -6,5 +6,5 @@ import com.artinfo.api.request.feed.FeedSearch;
 import java.util.List;
 
 public interface FeedRepositoryCustom {
-  List<Feed> getListByArtistId(FeedSearch feedSearch);
+  List<Feed> getList(FeedSearch feedSearch);
 }

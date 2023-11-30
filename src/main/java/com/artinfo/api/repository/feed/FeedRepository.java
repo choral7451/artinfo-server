@@ -5,5 +5,5 @@ import com.artinfo.api.domain.lesson.Lesson;
 import com.artinfo.api.repository.lesson.LessonsRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FeedRepository extends JpaRepository<Feed, Long> {
+public interface FeedRepository extends JpaRepository<Feed, Long>, FeedRepositoryCustom {
 }
