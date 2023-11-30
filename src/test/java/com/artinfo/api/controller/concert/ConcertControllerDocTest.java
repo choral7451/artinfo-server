@@ -5,6 +5,8 @@ import com.artinfo.api.domain.Concert;
 import com.artinfo.api.domain.enums.ConcertCategory;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;
+import com.artinfo.api.repository.feed.FeedRepository;
+import com.artinfo.api.repository.image.ImageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,9 +47,17 @@ public class ConcertControllerDocTest {
   @Autowired
   private ConcertRepository concertRepository;
 
+  @Autowired
+  private FeedRepository feedRepository;
+
+  @Autowired
+  private ImageRepository imageRepository;
+
 
   @BeforeEach
   void clean() {
+    imageRepository.deleteAll();
+    feedRepository.deleteAll();
     concertRepository.deleteAll();
     artistRepository.deleteAll();
   }

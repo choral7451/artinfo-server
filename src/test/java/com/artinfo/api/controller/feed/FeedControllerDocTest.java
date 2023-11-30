@@ -46,9 +46,6 @@ public class FeedControllerDocTest {
   private MockMvc mockMvc;
 
   @Autowired
-  private ObjectMapper objectMapper;
-
-  @Autowired
   private UserRepository userRepository;
 
   @Autowired

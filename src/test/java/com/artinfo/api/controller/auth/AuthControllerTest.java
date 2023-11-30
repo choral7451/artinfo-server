@@ -1,5 +1,7 @@
 package com.artinfo.api.controller.auth;
 
+import com.artinfo.api.repository.feed.FeedRepository;
+import com.artinfo.api.repository.image.ImageRepository;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.request.Signup;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,8 +31,16 @@ class AuthControllerTest {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private FeedRepository feedRepository;
+
+  @Autowired
+  private ImageRepository imageRepository;
+
   @BeforeEach
   void clean() {
+    imageRepository.deleteAll();
+    feedRepository.deleteAll();
     userRepository.deleteAll();
   }
 
