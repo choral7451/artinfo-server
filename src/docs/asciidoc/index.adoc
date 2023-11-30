@@ -104,6 +104,17 @@ include::{snippets}/get-concerts-by-artistId/path-parameters.adoc[]
 include::{snippets}/get-concerts-by-artistId/http-response.adoc[]
 include::{snippets}/get-concerts-by-artistId/response-fields.adoc[]
 
+== 피드
+=== 피드 단건 조회
+==== 요청
+include::{snippets}/get-feed/http-request.adoc[]
+include::{snippets}/get-feed/curl-request.adoc[]
+include::{snippets}/get-feed/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-feed/http-response.adoc[]
+include::{snippets}/get-feed/response-fields.adoc[]
+
 == 유튜브
 === 아티스트 유튜브 목록 조회
 ==== 요청

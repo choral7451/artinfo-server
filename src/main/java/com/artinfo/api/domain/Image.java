@@ -11,36 +11,27 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "youtubes")
+@Table(name = "images")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Youtube {
-
+public class Image {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "title")
-  private String title;
-
-  @Column(name = "link_url", columnDefinition = "text")
-  private String linkUrl;
+  @Column(name = "url", columnDefinition = "text")
+  private String url;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "artist_id", nullable = true)
-  private Artist artist;
-
-  @Column(name = "published_at", columnDefinition = "timestamp with time zone not null")
-  private LocalDateTime publishedAt;
+  @JoinColumn(name = "feed_id")
+  private Feed feed;
 
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Youtube(String title, String linkUrl, LocalDateTime publishedAt, Artist artist) {
-    this.title = title;
-    this.linkUrl = linkUrl;
-    this.publishedAt = publishedAt;
-    this.artist = artist;
+  public Image(String url, Feed feed) {
+    this.url =url;
+    this.feed = feed;
   }
 }

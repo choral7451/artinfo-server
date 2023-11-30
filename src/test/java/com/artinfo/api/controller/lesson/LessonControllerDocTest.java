@@ -75,7 +75,6 @@ public class LessonControllerDocTest {
   }
 
 
-  //TODO 수정 필요
   @Test
   @DisplayName("레슨 단건 조회")
   void getLesson() throws Exception {
