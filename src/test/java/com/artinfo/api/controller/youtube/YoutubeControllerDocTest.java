@@ -6,6 +6,7 @@ import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;
 import com.artinfo.api.repository.feed.FeedRepository;
 import com.artinfo.api.repository.image.ImageRepository;
+import com.artinfo.api.repository.user.LikeRepository;
 import com.artinfo.api.repository.youtube.YoutubeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +23,6 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -58,8 +58,12 @@ public class YoutubeControllerDocTest {
   @Autowired
   private FeedRepository feedRepository;
 
+  @Autowired
+  private LikeRepository likeRepository;
+
   @BeforeEach
   void clean() {
+    likeRepository.deleteAll();
     imageRepository.deleteAll();
     feedRepository.deleteAll();
     concertRepository.deleteAll();

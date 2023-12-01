@@ -105,11 +105,21 @@ include::{snippets}/get-concerts-by-artistId/http-response.adoc[]
 include::{snippets}/get-concerts-by-artistId/response-fields.adoc[]
 
 == 피드
+=== 피드 생성
+==== 요청
+include::{snippets}/create-feed/http-request.adoc[]
+include::{snippets}/create-feed/curl-request.adoc[]
+include::{snippets}/create-feed/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/create-feed/http-response.adoc[]
+
 === 피드 단건 조회
 ==== 요청
 include::{snippets}/get-feed/http-request.adoc[]
 include::{snippets}/get-feed/curl-request.adoc[]
 include::{snippets}/get-feed/path-parameters.adoc[]
+include::{snippets}/get-feed/query-parameters.adoc[]
 
 ==== 응답
 include::{snippets}/get-feed/http-response.adoc[]

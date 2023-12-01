@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -13,6 +15,7 @@ public class FeedSearch {
 
   private static final int MAX_SIZE = 2000;
 
+  private UUID requestUserId;
   @NotBlank(message = "아티스트 ID를 입력해 주세요.")
   private Long artistId;
   private Integer page = 1;

@@ -6,7 +6,7 @@ plugins {
 }
 
 ext {
-	apiVersion = "0.8.1"
+	apiVersion = "0.12.1"
 	asciidocVersion = "3.0.0"
 	snippetsDir = file('build/generated-snippets')
 }

@@ -44,6 +44,9 @@ public class Feed {
   @OneToMany(mappedBy = "feed")
   private List<Image> images;
 
+  @OneToMany(mappedBy = "feed")
+  private List<Like> likes;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "artist_id", nullable = true)
   private Artist artist;
@@ -62,5 +65,9 @@ public class Feed {
     this.contents = contents;
     this.artist = artist;
     this.user = user;
+  }
+
+  public void delete() {
+    this.isDeleted = true;
   }
 }

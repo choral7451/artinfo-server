@@ -1,18 +1,14 @@
 package com.artinfo.api.controller.user;
 
-import com.artinfo.api.domain.Degree;
-import com.artinfo.api.domain.Location;
-import com.artinfo.api.domain.Major;
 import com.artinfo.api.domain.User;
-import com.artinfo.api.domain.lesson.Lesson;
 import com.artinfo.api.repository.feed.FeedRepository;
 import com.artinfo.api.repository.image.ImageRepository;
 import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.repository.lesson.LocationRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
 import com.artinfo.api.repository.user.DegreeRepository;
+import com.artinfo.api.repository.user.LikeRepository;
 import com.artinfo.api.repository.user.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,8 +23,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -68,8 +62,12 @@ public class UserControllerDocTest {
   @Autowired
   private FeedRepository feedRepository;
 
+  @Autowired
+  private LikeRepository likeRepository;
+
   @BeforeEach
   void clean() {
+    likeRepository.deleteAll();
     imageRepository.deleteAll();
     feedRepository.deleteAll();
     majorRepository.deleteAll();

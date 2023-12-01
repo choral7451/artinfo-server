@@ -11,6 +11,7 @@ import com.artinfo.api.repository.lesson.LessonRepository;
 import com.artinfo.api.repository.lesson.LocationRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
 import com.artinfo.api.repository.user.DegreeRepository;
+import com.artinfo.api.repository.user.LikeRepository;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.request.lesson.LessonCreate;
 import com.artinfo.api.request.lesson.LessonEdit;
@@ -73,8 +74,11 @@ public class LessonControllerDocTest {
   @Autowired
   private ImageRepository imageRepository;
 
+  @Autowired
+  private LikeRepository likeRepository;
   @BeforeEach
   void clean() {
+    likeRepository.deleteAll();
     imageRepository.deleteAll();
     majorRepository.deleteAll();
     lessonRepository.deleteAll();

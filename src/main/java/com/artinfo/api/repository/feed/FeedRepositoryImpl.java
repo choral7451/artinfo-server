@@ -17,6 +17,7 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
   @Override
   public List<Feed> getList(FeedSearch feedSearch) {
     return jpaQueryFactory.selectFrom(feed)
+      .where(feed.isDeleted.eq(false))
       .where(feed.artist.id.eq(feedSearch.getArtistId()))
       .limit(feedSearch.getSize())
       .offset(feedSearch.getOffset())
