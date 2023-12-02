@@ -44,6 +44,10 @@ public class Concert {
   private Boolean isActive;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "profile_id")
+  private User user;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "artist_id", nullable = true)
   private Artist artist;
 
@@ -55,7 +59,7 @@ public class Concert {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Concert(String title, String contents, ConcertCategory category, String location, String posterUrl, String linkUrl, LocalDateTime performanceTime, Boolean isActive, Artist artist) {
+  public Concert(String title, String contents, ConcertCategory category, String location, String posterUrl, String linkUrl, LocalDateTime performanceTime, Boolean isActive,User user, Artist artist) {
     this.title = title;
     this.contents = contents;
     this.category = category.toString();
@@ -63,6 +67,7 @@ public class Concert {
     this.posterUrl = posterUrl;
     this.linkUrl = linkUrl;
     this.isActive = isActive;
+    this.user = user;
     this.artist = artist;
     this.performanceTime = performanceTime;
   }

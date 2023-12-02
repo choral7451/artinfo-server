@@ -4,6 +4,7 @@ import com.artinfo.api.domain.Location;
 import com.artinfo.api.domain.Major;
 import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.lesson.Lesson;
+import com.artinfo.api.repository.concert.ConcertRepository;
 import com.artinfo.api.repository.feed.FeedRepository;
 import com.artinfo.api.repository.image.ImageRepository;
 import com.artinfo.api.repository.lesson.LessonRepository;
@@ -61,8 +62,12 @@ class LessonControllerTest {
   @Autowired
   private ImageRepository imageRepository;
 
+  @Autowired
+  private ConcertRepository concertRepository;
+
   @BeforeEach
   void clean() {
+    concertRepository.deleteAll();
     imageRepository.deleteAll();
     majorRepository.deleteAll();
     lessonRepository.deleteAll();

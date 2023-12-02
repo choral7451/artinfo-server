@@ -13,9 +13,8 @@ public class ConcertSearch {
 
   private static final int MAX_SIZE = 2000;
 
-  private Integer page = 1;
-  private Integer size = 20;
-  private Long artistId;
+  private Integer page;
+  private Integer size;
   private ConcertCategory category;
 
   public ConcertSearch() {
