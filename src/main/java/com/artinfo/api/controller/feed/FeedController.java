@@ -25,10 +25,10 @@ public class FeedController {
     return feedService.get(feedId, requestUserId);
   }
 
-//  @DeleteMapping("/feeds/{feedId}")
-//  public FeedDetailResponse get(@PathVariable(name = "feedId") Long feedId) {
-//    return feedService.get(feedId);
-//  }
+  @DeleteMapping("/feeds/{feedId}")
+  public void delete(@PathVariable(name = "feedId") Long feedId) {
+    feedService.delete(feedId);
+  }
 
   @GetMapping("/feeds")
   public List<FeedResponse> getList(@ModelAttribute FeedSearch feedSearch) {

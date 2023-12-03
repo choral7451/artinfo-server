@@ -54,6 +54,18 @@ public class FeedService {
       .build();
   }
 
+  public void delete(Long feedId) {
+    Feed feed = feedRepository.findById(feedId)
+      .orElseThrow(FeedNotFound::new);
+
+    if(feed.getIsDeleted()) {
+      throw new FeedNotFound();
+    }
+
+    feed.delete();
+    feedRepository.save(feed);
+  }
+
   public List<FeedResponse> getList(FeedSearch feedSearch) {
     return feedRepository.getList(feedSearch).stream()
       .map(feed -> {
@@ -101,12 +113,5 @@ public class FeedService {
     }).toList();
 
     imageRepository.saveAll(images);
-  }
-
-  public void delete(Long feedId) {
-    feedRepository.findById(feedId)
-      .orElseThrow(FeedNotFound::new);
-
-    feedRepository.deleteById(feedId);
   }
 }

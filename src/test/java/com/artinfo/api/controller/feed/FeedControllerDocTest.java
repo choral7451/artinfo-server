@@ -141,6 +141,44 @@ public class FeedControllerDocTest {
   }
 
   @Test
+  @DisplayName("피드 삭제")
+  void deleteFeed() throws Exception {
+    //given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+    userRepository.save(user);
+
+    Feed feed = Feed.builder()
+      .title("제목")
+      .contents("내용")
+      .user(user)
+      .build();
+    feedRepository.save(feed);
+
+    Image image = Image.builder()
+      .url("www.sample_image_url.com")
+      .feed(feed)
+      .build();
+    imageRepository.save(image);
+
+    //expected
+    this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/feeds/{feedId}", feed.getId())
+        .accept(MediaType.APPLICATION_JSON)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("delete-feed",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+        pathParameters(
+          parameterWithName("feedId").description("피드 ID")
+            .attributes(key("type").value("Number"))
+        )));
+  }
+
+  @Test
   @DisplayName("피드 목록 조회")
   void getListByArtistId() throws Exception {
     //given

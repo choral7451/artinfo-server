@@ -125,6 +125,15 @@ include::{snippets}/create-feed/request-fields.adoc[]
 ==== 응답
 include::{snippets}/create-feed/http-response.adoc[]
 
+=== 피드 삭제
+==== 요청
+include::{snippets}/delete-feed/http-request.adoc[]
+include::{snippets}/delete-feed/curl-request.adoc[]
+include::{snippets}/delete-feed/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/delete-feed/http-response.adoc[]
+
 === 피드 단건 조회
 ==== 요청
 include::{snippets}/get-feed/http-request.adoc[]
