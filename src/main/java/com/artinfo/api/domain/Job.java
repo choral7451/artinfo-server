@@ -1,6 +1,7 @@
 package com.artinfo.api.domain;
 
 import com.artinfo.api.domain.enums.RecruitJobsCategory;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,13 +10,14 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Table(name = "recruit_jobs")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class RecruitJob {
+public class Job {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +44,15 @@ public class RecruitJob {
   @Enumerated(EnumType.STRING)
   private RecruitJobsCategory category;
 
+  @JsonManagedReference
+  @ManyToMany
+  @JoinTable(
+    name = "recruit_jobs_majors",
+    joinColumns = @JoinColumn(name = "recruit_job_id"),
+    inverseJoinColumns = @JoinColumn(name = "major_id")
+  )
+  private List<Major> majors;
+
   @Column(name = "is_active")
   private boolean isActive = true;
 
@@ -50,7 +61,7 @@ public class RecruitJob {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public RecruitJob(UUID profileId, String title, String companyName, String companyImageUrl, String linkUrl, String contents, RecruitJobsCategory category) {
+  public Job(UUID profileId, String title, String companyName, String companyImageUrl, String linkUrl, String contents, RecruitJobsCategory category, List<Major> majors) {
     this.profileId = profileId;
     this.title = title;
     this.companyName = companyName;
@@ -58,5 +69,6 @@ public class RecruitJob {
     this.linkUrl = linkUrl;
     this.contents = contents;
     this.category = category;
+    this.majors = majors;
   }
 }

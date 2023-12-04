@@ -1,9 +1,8 @@
-package com.artinfo.api.controller.recruit_job;
+package com.artinfo.api.controller.job;
 
-import com.artinfo.api.domain.RecruitJob;
+import com.artinfo.api.domain.Job;
 import com.artinfo.api.domain.enums.RecruitJobsCategory;
-import com.artinfo.api.repository.recruit_job.RecruitJobRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.artinfo.api.repository.job.JobRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -21,13 +19,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class RecruitJobControllerTest {
+class JobControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
 
   @Autowired
-  private RecruitJobRepository recruitJobRepository;
+  private JobRepository recruitJobRepository;
 
 //  @BeforeEach
 //  void clean() {
@@ -38,7 +36,7 @@ class RecruitJobControllerTest {
   @DisplayName("채용 단건 조회")
   void getRecruitJob() throws Exception {
     // given
-    RecruitJob recruitJob = RecruitJob.builder()
+    Job recruitJob = Job.builder()
       .profileId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .title("제목")
       .companyName("회사 이름")

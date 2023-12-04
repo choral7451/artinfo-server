@@ -1,4 +1,4 @@
-package com.artinfo.api.response.recruit_job;
+package com.artinfo.api.response.job;
 
 import com.artinfo.api.domain.enums.RecruitJobsCategory;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class RecruitJobDetailResponse {
+public class JobDetailResponse {
   private Long id;
   private UUID profileId;
   private String title;

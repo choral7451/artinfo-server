@@ -25,13 +25,17 @@ public class Major {
   @Column(name = "name")
   private String name;
 
-  @CreatedDate
-  @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
-  private LocalDateTime createdAt = LocalDateTime.now();
+  @JsonBackReference
+  @ManyToMany(mappedBy = "majors", cascade = CascadeType.REMOVE)
+  private List<Job> jobs;
 
   @JsonBackReference
   @ManyToMany(mappedBy = "majors", cascade = CascadeType.REMOVE)
   private List<Lesson> lessons;
+
+  @CreatedDate
+  @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
+  private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
   public Major(String name) {
