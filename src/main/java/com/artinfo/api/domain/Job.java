@@ -1,6 +1,5 @@
 package com.artinfo.api.domain;
 
-import com.artinfo.api.domain.enums.RecruitJobsCategory;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,7 +23,7 @@ public class Job {
   private Long id;
 
   @Column(name = "profile_id")
-  private UUID profileId;
+  private UUID userId;
 
   @Column(name = "title")
   private String title;
@@ -40,9 +39,6 @@ public class Job {
 
   @Column(name = "contents", columnDefinition = "text")
   private String contents;
-
-  @Enumerated(EnumType.STRING)
-  private RecruitJobsCategory category;
 
   @JsonManagedReference
   @ManyToMany
@@ -61,14 +57,13 @@ public class Job {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Job(UUID profileId, String title, String companyName, String companyImageUrl, String linkUrl, String contents, RecruitJobsCategory category, List<Major> majors) {
-    this.profileId = profileId;
+  public Job(UUID userId, String title, String companyName, String companyImageUrl, String linkUrl, String contents, List<Major> majors) {
+    this.userId = userId;
     this.title = title;
     this.companyName = companyName;
     this.companyImageUrl = companyImageUrl;
     this.linkUrl = linkUrl;
     this.contents = contents;
-    this.category = category;
     this.majors = majors;
   }
 }

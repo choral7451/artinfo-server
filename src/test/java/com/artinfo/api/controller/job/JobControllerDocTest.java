@@ -2,9 +2,13 @@ package com.artinfo.api.controller.job;
 
 import com.artinfo.api.domain.Job;
 import com.artinfo.api.domain.Major;
+import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.enums.RecruitJobsCategory;
 import com.artinfo.api.repository.job.JobRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
+import com.artinfo.api.repository.user.UserRepository;
+import com.artinfo.api.request.job.JobCreate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,8 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,15 +43,63 @@ public class JobControllerDocTest {
   private MockMvc mockMvc;
 
   @Autowired
+  private ObjectMapper objectMapper;
+
+  @Autowired
   private JobRepository jobRepository;
 
   @Autowired
   private MajorRepository majorRepository;
 
+  @Autowired
+  private UserRepository userRepository;
+
   @BeforeEach
   void clean() {
     majorRepository.deleteAll();
     jobRepository.deleteAll();
+    userRepository.deleteAll();
+  }
+
+  @Test
+  @DisplayName("채용 생성")
+  void createJob() throws Exception {
+    // given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+    userRepository.save(user);
+
+    JobCreate request = JobCreate.builder()
+      .userId(user.getId())
+      .title("제목")
+      .companyName("회사이름")
+      .companyImageUrl("test.sample-image-url.com")
+      .linkUrl("test.sample-link-url.com")
+      .contents("내용")
+      .majors(List.of("피아노", "지휘"))
+      .build();
+
+    String json = objectMapper.writeValueAsString(request);
+
+    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/jobs")
+        .accept(MediaType.APPLICATION_JSON)
+        .content(json)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("create-job",
+        requestFields(
+          fieldWithPath("userId").type(JsonFieldType.STRING).description("유저 ID"),
+          fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+          fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사명"),
+          fieldWithPath("companyImageUrl").type(JsonFieldType.STRING).description("회사 이미지 주소"),
+          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("채용 정보 주소"),
+          fieldWithPath("contents").type(JsonFieldType.STRING).description("채용 내용"),
+          fieldWithPath("majors").type(JsonFieldType.ARRAY).description("해당 전공")
+        )
+      ));
   }
 
   @Test
@@ -56,11 +107,10 @@ public class JobControllerDocTest {
   void getJob() throws Exception {
     // given
     Job job = Job.builder()
-      .profileId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
+      .userId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .title("제목")
       .companyName("회사 이름")
       .contents("내용")
-      .category(RecruitJobsCategory.ART_ORGANIZATION)
       .linkUrl("www.sample_link_url.com")
       .companyImageUrl("www.sample_company_image_url.com")
       .build();
@@ -71,24 +121,21 @@ public class JobControllerDocTest {
         .accept(MediaType.APPLICATION_JSON)
       )
       .andExpect(status().isOk())
-      .andDo(document("get-recruit_job",
+      .andDo(document("get-job",
         pathParameters(
           parameterWithName("jobId").description("채용 ID")
             .attributes(Attributes.key("type").value("Numnber"))
         ),
         responseFields(
           fieldWithPath("id").type(JsonFieldType.NUMBER).description("채용 ID"),
-          fieldWithPath("profileId").type(JsonFieldType.STRING).description("프로필 ID"),
+          fieldWithPath("userId").type(JsonFieldType.STRING).description("프로필 ID"),
           fieldWithPath("title").type(JsonFieldType.STRING).description("채용 제목"),
           fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사 이름"),
           fieldWithPath("companyImageUrl").type(JsonFieldType.STRING).description("회사 이미지 주소"),
           fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("채용 링크 주소"),
-          fieldWithPath("contents").type(JsonFieldType.STRING).description("채용 내용"),
-          fieldWithPath("category").type(JsonFieldType.STRING).description("채용 카테고리"),
-          fieldWithPath("active").type(JsonFieldType.BOOLEAN).description("채용 활성화 여부")
+          fieldWithPath("contents").type(JsonFieldType.STRING).description("채용 내용")
         )
       ));
-
   }
 
   @Test
@@ -105,22 +152,20 @@ public class JobControllerDocTest {
     majorRepository.saveAll(List.of(major1, major2));
 
     Job job1 = Job.builder()
-      .profileId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
+      .userId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .title("제목1")
       .companyName("회사 이름1")
       .contents("내용1")
-      .category(RecruitJobsCategory.ART_ORGANIZATION)
       .linkUrl("www.sample_link_url_1.com")
       .companyImageUrl("www.sample_company_image_url_1.com")
       .majors(List.of(major1,major2))
       .build();
 
     Job job2 = Job.builder()
-      .profileId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
+      .userId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .title("제목2")
       .companyName("회사 이름2")
       .contents("내용2")
-      .category(RecruitJobsCategory.ART_ORGANIZATION)
       .linkUrl("www.sample_link_url_2.com")
       .companyImageUrl("www.sample_company_image_url_2.com")
       .majors(List.of(major2))

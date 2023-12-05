@@ -63,15 +63,24 @@ include::{snippets}/get-lessons/http-response.adoc[]
 include::{snippets}/get-lessons/response-fields.adoc[]
 
 == 채용
-=== 채용 단건 조회
+=== 채용 생성
 ==== 요청
-include::{snippets}/get-recruit_job/http-request.adoc[]
-include::{snippets}/get-recruit_job/curl-request.adoc[]
-include::{snippets}/get-recruit_job/path-parameters.adoc[]
+include::{snippets}/create-job/http-request.adoc[]
+include::{snippets}/create-job/curl-request.adoc[]
+include::{snippets}/create-job/request-fields.adoc[]
 
 ==== 응답
-include::{snippets}/get-recruit_job/http-response.adoc[]
-include::{snippets}/get-recruit_job/response-fields.adoc[]
+include::{snippets}/create-job/http-response.adoc[]
+
+=== 채용 단건 조회
+==== 요청
+include::{snippets}/get-job/http-request.adoc[]
+include::{snippets}/get-job/curl-request.adoc[]
+include::{snippets}/get-job/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-job/http-response.adoc[]
+include::{snippets}/get-job/response-fields.adoc[]
 
 === 채용 목록 조회
 ==== 요청

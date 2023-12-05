@@ -1,19 +1,21 @@
-package com.artinfo.api.response.job;
+package com.artinfo.api.request.job;
 
-import com.artinfo.api.domain.enums.RecruitJobsCategory;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Builder
-public class JobDetailResponse {
-  private Long id;
+public class JobCreate {
   private UUID userId;
   private String title;
   private String companyName;
   private String companyImageUrl;
   private String linkUrl;
   private String contents;
+  private List<String> majors;
 }
