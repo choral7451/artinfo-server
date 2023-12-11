@@ -72,6 +72,16 @@ include::{snippets}/create-job/request-fields.adoc[]
 ==== 응답
 include::{snippets}/create-job/http-response.adoc[]
 
+=== 채용 수정
+==== 요청
+include::{snippets}/edit-job/http-request.adoc[]
+include::{snippets}/edit-job/curl-request.adoc[]
+include::{snippets}/edit-job/path-parameters.adoc[]
+include::{snippets}/edit-job/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/edit-job/http-response.adoc[]
+
 === 채용 단건 조회
 ==== 요청
 include::{snippets}/get-job/http-request.adoc[]

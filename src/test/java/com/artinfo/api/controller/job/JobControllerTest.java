@@ -1,6 +1,6 @@
 package com.artinfo.api.controller.job;
 
-import com.artinfo.api.domain.Job;
+import com.artinfo.api.domain.job.Job;
 import com.artinfo.api.repository.job.JobRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

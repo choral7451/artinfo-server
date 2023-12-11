@@ -388,7 +388,7 @@ public class LessonControllerDocTest {
   }
 
   @Test
-  @DisplayName("레슨 수정")
+  @DisplayName("레슨 삭제")
   void remove() throws Exception {
     //given
     User user = User.builder()

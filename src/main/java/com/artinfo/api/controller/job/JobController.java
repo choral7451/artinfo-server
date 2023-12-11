@@ -1,6 +1,7 @@
 package com.artinfo.api.controller.job;
 
 import com.artinfo.api.request.job.JobCreate;
+import com.artinfo.api.request.job.JobEdit;
 import com.artinfo.api.request.job.JobSearch;
 import com.artinfo.api.response.job.JobDetailResponse;
 import com.artinfo.api.response.job.JobResponse;
@@ -17,10 +18,14 @@ public class JobController {
   private final JobService jobService;
 
   @PostMapping("/jobs")
-  public void create(@ModelAttribute JobCreate jobCreate) {
+  public void create(@RequestBody JobCreate jobCreate) {
     jobService.create(jobCreate);
   }
 
+  @PutMapping("/jobs/{jobId}")
+  public void edit(@PathVariable(name = "jobId") Long jobId, @RequestBody JobEdit jobEdit) {
+    jobService.edit(jobId, jobEdit);
+  }
 
   @GetMapping("/jobs/{jobId}")
   public JobDetailResponse get(@PathVariable(name = "jobId") Long id) {

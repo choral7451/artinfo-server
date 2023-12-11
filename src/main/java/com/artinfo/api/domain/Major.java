@@ -1,5 +1,6 @@
 package com.artinfo.api.domain;
 
+import com.artinfo.api.domain.job.Job;
 import com.artinfo.api.domain.lesson.Lesson;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

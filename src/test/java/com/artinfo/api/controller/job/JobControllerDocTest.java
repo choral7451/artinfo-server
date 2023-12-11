@@ -1,13 +1,13 @@
 package com.artinfo.api.controller.job;
 
-import com.artinfo.api.domain.Job;
+import com.artinfo.api.domain.job.Job;
 import com.artinfo.api.domain.Major;
 import com.artinfo.api.domain.User;
-import com.artinfo.api.domain.enums.RecruitJobsCategory;
 import com.artinfo.api.repository.job.JobRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.request.job.JobCreate;
+import com.artinfo.api.request.job.JobEdit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -84,18 +86,84 @@ public class JobControllerDocTest {
 
     String json = objectMapper.writeValueAsString(request);
 
-    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/jobs")
-        .accept(MediaType.APPLICATION_JSON)
+    this.mockMvc.perform(RestDocumentationRequestBuilders.post("/jobs")
+        .contentType(APPLICATION_JSON)
         .content(json)
       )
       .andExpect(status().isOk())
       .andDo(document("create-job",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
         requestFields(
           fieldWithPath("userId").type(JsonFieldType.STRING).description("유저 ID"),
           fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
           fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사명"),
           fieldWithPath("companyImageUrl").type(JsonFieldType.STRING).description("회사 이미지 주소"),
-          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("채용 정보 주소"),
+          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("채용 정보 주소").optional(),
+          fieldWithPath("contents").type(JsonFieldType.STRING).description("채용 내용"),
+          fieldWithPath("majors").type(JsonFieldType.ARRAY).description("해당 전공")
+        )
+      ));
+  }
+
+  @Test
+  @DisplayName("채용 수정")
+  void editJob() throws Exception {
+    // given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+    userRepository.save(user);
+
+    Major major = Major.builder()
+      .name("플루트")
+      .build();
+    majorRepository.save(major);
+
+    Job job = Job.builder()
+      .userId(user.getId())
+      .title("제목")
+      .companyName("회사 이름")
+      .contents("내용")
+      .linkUrl("www.sample_link_url.com")
+      .majors(List.of(major))
+      .companyImageUrl("www.sample_company_image_url.com")
+      .build();
+    jobRepository.save(job);
+
+
+    JobEdit request = JobEdit.builder()
+      .userId(user.getId())
+      .title("수정 제목")
+      .companyName("수정 회사이름")
+      .companyImageUrl("test.update-sample-image-url.com")
+      .linkUrl("test.update-sample-link-url.com")
+      .contents("수정 내용")
+      .majors(List.of("가야금", "지휘"))
+      .build();
+
+    String json = objectMapper.writeValueAsString(request);
+
+    this.mockMvc.perform(RestDocumentationRequestBuilders.put("/jobs/{jobId}", job.getId())
+        .contentType(APPLICATION_JSON)
+        .content(json)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("edit-job",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+        pathParameters(
+          parameterWithName("jobId").description("채용 ID")
+            .attributes(key("type").value("Number"))
+        ),
+        requestFields(
+          fieldWithPath("userId").type(JsonFieldType.STRING).description("유저 ID"),
+          fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+          fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사명"),
+          fieldWithPath("companyImageUrl").type(JsonFieldType.STRING).description("회사 이미지 주소"),
+          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("채용 정보 주소").optional(),
           fieldWithPath("contents").type(JsonFieldType.STRING).description("채용 내용"),
           fieldWithPath("majors").type(JsonFieldType.ARRAY).description("해당 전공")
         )
@@ -122,6 +190,8 @@ public class JobControllerDocTest {
       )
       .andExpect(status().isOk())
       .andDo(document("get-job",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
         pathParameters(
           parameterWithName("jobId").description("채용 ID")
             .attributes(Attributes.key("type").value("Numnber"))
@@ -180,6 +250,8 @@ public class JobControllerDocTest {
       )
       .andExpect(status().isOk())
       .andDo(document("get-jobs",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
         queryParameters(
           parameterWithName("page").description("페이지 번호").optional()
             .attributes(key("type").value("Number")),

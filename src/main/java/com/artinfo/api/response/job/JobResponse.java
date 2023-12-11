@@ -1,6 +1,6 @@
 package com.artinfo.api.response.job;
 
-import com.artinfo.api.domain.Job;
+import com.artinfo.api.domain.job.Job;
 import com.artinfo.api.domain.Major;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,5 +1,6 @@
-package com.artinfo.api.domain;
+package com.artinfo.api.domain.job;
 
+import com.artinfo.api.domain.Major;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -65,5 +66,14 @@ public class Job {
     this.linkUrl = linkUrl;
     this.contents = contents;
     this.majors = majors;
+  }
+
+  public void edit(JobEditor editor) {
+    this.title = editor.getTitle();
+    this.companyName = editor.getCompanyName();
+    this.companyImageUrl = editor.getCompanyImageUrl();
+    this.linkUrl = editor.getLinkUrl();
+    this.contents = editor.getContents();
+    this.majors = editor.getMajors();
   }
 }

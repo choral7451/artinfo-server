@@ -1,31 +1,54 @@
 package com.artinfo.api.service;
 
-import com.artinfo.api.domain.Job;
 import com.artinfo.api.domain.Major;
+import com.artinfo.api.domain.job.Job;
+import com.artinfo.api.domain.job.JobEditor;
 import com.artinfo.api.exception.JobNotFound;
+import com.artinfo.api.exception.UserNotFound;
 import com.artinfo.api.repository.job.JobRepository;
+import com.artinfo.api.repository.lesson.MajorRepository;
+import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.request.job.JobCreate;
+import com.artinfo.api.request.job.JobEdit;
 import com.artinfo.api.request.job.JobSearch;
-import com.artinfo.api.response.job.JobResponse;
 import com.artinfo.api.response.job.JobDetailResponse;
+import com.artinfo.api.response.job.JobResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JobService {
 
+  private final MajorRepository majorRepository;
   private final JobRepository jobRepository;
+  private final UserRepository userRepository;
 
   public void create(JobCreate jobCreate) {
-    List<Major> majors = jobCreate.getMajors().stream().map(majorName -> {
-      return Major.builder()
-        .name(majorName)
-        .build();
-    }).toList();
+    log.info(">>>>>>>>>>>>>>>>>>>>>>>>>{}",jobCreate.getUserId());
+    log.info(">>>>>>>>>>>>>>>>>>>>>>>>>{}",jobCreate.getTitle());
+    userRepository.findById(jobCreate.getUserId())
+      .orElseThrow(UserNotFound::new);
+
+    List<Major> majors = new ArrayList<>();
+    for(String major: jobCreate.getMajors()) {
+      Optional<Major> fetchedMajor = majorRepository.findByName(major);
+      if(fetchedMajor.isPresent()) {
+        majors.add(fetchedMajor.get());
+      } else {
+        Major CreatedMajor = Major.builder().name(major).build();
+        majorRepository.save(CreatedMajor);
+        majors.add(CreatedMajor);
+      }
+    }
 
     Job job = Job.builder()
       .userId(jobCreate.getUserId())
@@ -38,6 +61,38 @@ public class JobService {
       .build();
 
     jobRepository.save(job);
+  }
+
+  @Transactional
+  public void edit(Long jobId, JobEdit jobEdit) {
+    userRepository.findById(jobEdit.getUserId())
+      .orElseThrow(UserNotFound::new);
+
+    Job job = jobRepository.findById(jobId)
+      .orElseThrow(JobNotFound::new);
+
+    List<Major> majors = new ArrayList<>();
+    for(String major: jobEdit.getMajors()) {
+      Optional<Major> fetchedMajor = majorRepository.findByName(major);
+      if(fetchedMajor.isPresent()) {
+        majors.add(fetchedMajor.get());
+      } else {
+        Major CreatedMajor = Major.builder().name(major).build();
+        majorRepository.save(CreatedMajor);
+        majors.add(CreatedMajor);
+      }
+    }
+
+    JobEditor jobEditor = JobEditor.builder()
+      .title(jobEdit.getTitle())
+      .companyName(jobEdit.getCompanyName())
+      .companyImageUrl(jobEdit.getCompanyImageUrl())
+      .linkUrl(jobEdit.getLinkUrl())
+      .contents(jobEdit.getContents())
+      .majors(majors)
+      .build();
+
+    job.edit(jobEditor);
   }
 
   public List<JobResponse> getList(JobSearch jobSearch) {
