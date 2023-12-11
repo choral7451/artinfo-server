@@ -4,6 +4,7 @@ import com.artinfo.api.domain.Major;
 import com.artinfo.api.domain.job.Job;
 import com.artinfo.api.domain.job.JobEditor;
 import com.artinfo.api.exception.JobNotFound;
+import com.artinfo.api.exception.LessonNotFound;
 import com.artinfo.api.exception.UserNotFound;
 import com.artinfo.api.repository.job.JobRepository;
 import com.artinfo.api.repository.lesson.MajorRepository;
@@ -33,8 +34,6 @@ public class JobService {
   private final UserRepository userRepository;
 
   public void create(JobCreate jobCreate) {
-    log.info(">>>>>>>>>>>>>>>>>>>>>>>>>{}",jobCreate.getUserId());
-    log.info(">>>>>>>>>>>>>>>>>>>>>>>>>{}",jobCreate.getTitle());
     userRepository.findById(jobCreate.getUserId())
       .orElseThrow(UserNotFound::new);
 
@@ -93,6 +92,14 @@ public class JobService {
       .build();
 
     job.edit(jobEditor);
+  }
+
+  @Transactional
+  public void delete(Long id) {
+    Job job = jobRepository.findById(id)
+      .orElseThrow(LessonNotFound::new);
+
+    jobRepository.deleteById(id);
   }
 
   public List<JobResponse> getList(JobSearch jobSearch) {

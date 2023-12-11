@@ -27,6 +27,11 @@ public class JobController {
     jobService.edit(jobId, jobEdit);
   }
 
+  @DeleteMapping("/jobs/{jobId}")
+  public void delete(@PathVariable(name = "jobId") Long id) {
+    jobService.delete(id);
+  }
+
   @GetMapping("/jobs/{jobId}")
   public JobDetailResponse get(@PathVariable(name = "jobId") Long id) {
     return jobService.get(id);

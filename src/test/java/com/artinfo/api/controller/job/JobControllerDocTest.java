@@ -171,6 +171,48 @@ public class JobControllerDocTest {
   }
 
   @Test
+  @DisplayName("채용 삭제")
+  void deleteJob() throws Exception {
+    // given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+    userRepository.save(user);
+
+    Major major = Major.builder()
+      .name("플루트")
+      .build();
+    majorRepository.save(major);
+
+    Job job = Job.builder()
+      .userId(user.getId())
+      .title("제목")
+      .companyName("회사 이름")
+      .contents("내용")
+      .linkUrl("www.sample_link_url.com")
+      .majors(List.of(major))
+      .companyImageUrl("www.sample_company_image_url.com")
+      .build();
+    jobRepository.save(job);
+
+
+    this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/jobs/{jobId}", job.getId())
+        .contentType(APPLICATION_JSON)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("delete-job",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+        pathParameters(
+          parameterWithName("jobId").description("채용 ID")
+            .attributes(key("type").value("Number"))
+        )
+      ));
+  }
+
+  @Test
   @DisplayName("채용 단건 조회")
   void getJob() throws Exception {
     // given

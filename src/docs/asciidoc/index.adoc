@@ -82,6 +82,15 @@ include::{snippets}/edit-job/request-fields.adoc[]
 ==== 응답
 include::{snippets}/edit-job/http-response.adoc[]
 
+=== 채용 삭제
+==== 요청
+include::{snippets}/delete-job/http-request.adoc[]
+include::{snippets}/delete-job/curl-request.adoc[]
+include::{snippets}/delete-job/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/delete-job/http-response.adoc[]
+
 === 채용 단건 조회
 ==== 요청
 include::{snippets}/get-job/http-request.adoc[]
