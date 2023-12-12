@@ -119,6 +119,7 @@ public class JobService {
       .companyImageUrl(job.getCompanyImageUrl())
       .linkUrl(job.getLinkUrl())
       .contents(job.getContents())
+      .majors(job.getMajors().stream().map(Major::getName).toList())
       .build();
   }
 }

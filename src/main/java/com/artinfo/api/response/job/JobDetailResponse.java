@@ -1,9 +1,9 @@
 package com.artinfo.api.response.job;
 
-import com.artinfo.api.domain.enums.RecruitJobsCategory;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -16,4 +16,5 @@ public class JobDetailResponse {
   private String companyImageUrl;
   private String linkUrl;
   private String contents;
+  private List<String> majors;
 }

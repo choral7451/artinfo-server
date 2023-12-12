@@ -216,6 +216,15 @@ public class JobControllerDocTest {
   @DisplayName("채용 단건 조회")
   void getJob() throws Exception {
     // given
+    Major major1 = Major.builder()
+      .name("플루트")
+      .build();
+
+    Major major2 = Major.builder()
+      .name("피아노")
+      .build();
+    majorRepository.saveAll(List.of(major1, major2));
+
     Job job = Job.builder()
       .userId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .title("제목")
@@ -223,6 +232,7 @@ public class JobControllerDocTest {
       .contents("내용")
       .linkUrl("www.sample_link_url.com")
       .companyImageUrl("www.sample_company_image_url.com")
+      .majors(List.of(major1,major2))
       .build();
 
     jobRepository.save(job);
@@ -245,7 +255,8 @@ public class JobControllerDocTest {
           fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사 이름"),
           fieldWithPath("companyImageUrl").type(JsonFieldType.STRING).description("회사 이미지 주소"),
           fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("채용 링크 주소"),
-          fieldWithPath("contents").type(JsonFieldType.STRING).description("채용 내용")
+          fieldWithPath("contents").type(JsonFieldType.STRING).description("채용 내용"),
+          fieldWithPath("majors").type(JsonFieldType.ARRAY).description("채용 해당 전공")
         )
       ));
   }
