@@ -9,5 +9,6 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "artinfo")
 public class AppConfig {
 
+  public String jobDefault;
   public Map<String, String> coolSms;
 }

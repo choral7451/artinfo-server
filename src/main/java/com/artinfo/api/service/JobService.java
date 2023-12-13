@@ -1,5 +1,6 @@
 package com.artinfo.api.service;
 
+import com.artinfo.api.config.AppConfig;
 import com.artinfo.api.domain.Major;
 import com.artinfo.api.domain.job.Job;
 import com.artinfo.api.domain.job.JobEditor;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JobService {
 
+  private final AppConfig appConfig;
   private final MajorRepository majorRepository;
   private final JobRepository jobRepository;
   private final UserRepository userRepository;
@@ -49,12 +51,17 @@ public class JobService {
       }
     }
 
+    String companyImageUrl = jobCreate.getCompanyImageUrl();
+    if(jobCreate.getCompanyImageUrl() == null || jobCreate.getCompanyImageUrl().isEmpty()) {
+      companyImageUrl = appConfig.jobDefault;
+    }
+
     Job job = Job.builder()
       .userId(jobCreate.getUserId())
       .title(jobCreate.getTitle())
       .contents(jobCreate.getContents())
       .companyName(jobCreate.getCompanyName())
-      .companyImageUrl(jobCreate.getCompanyImageUrl())
+      .companyImageUrl(companyImageUrl)
       .linkUrl(jobCreate.getLinkUrl())
       .majors(majors)
       .build();
@@ -82,10 +89,15 @@ public class JobService {
       }
     }
 
+    String companyImageUrl = jobEdit.getCompanyImageUrl();
+    if(jobEdit.getCompanyImageUrl() == null || jobEdit.getCompanyImageUrl().isEmpty()) {
+      companyImageUrl = appConfig.jobDefault;
+    }
+
     JobEditor jobEditor = JobEditor.builder()
       .title(jobEdit.getTitle())
       .companyName(jobEdit.getCompanyName())
-      .companyImageUrl(jobEdit.getCompanyImageUrl())
+      .companyImageUrl(companyImageUrl)
       .linkUrl(jobEdit.getLinkUrl())
       .contents(jobEdit.getContents())
       .majors(majors)
