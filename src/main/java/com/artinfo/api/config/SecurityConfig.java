@@ -54,7 +54,6 @@ public class SecurityConfig {
         e.authenticationEntryPoint(new Http401Handler(objectMapper));
       })
       .oauth2Login(e -> {
-//        e.loginPage("/auth/login/social");
         e.userInfoEndpoint(event -> {
           event.userService(customOauth2Service);
         });

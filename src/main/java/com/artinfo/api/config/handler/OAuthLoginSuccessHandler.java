@@ -21,6 +21,7 @@ public class OAuthLoginSuccessHandler extends SavedRequestAwareAuthenticationSuc
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                       Authentication authentication) throws ServletException, IOException {
+
     CustomOAuth2User oauth2User = (CustomOAuth2User) authentication.getPrincipal();
     String email = oauth2User.getOauth2ClientName();
 

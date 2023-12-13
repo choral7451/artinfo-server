@@ -38,8 +38,15 @@ public class CustomOauth2Service extends DefaultOAuth2UserService {
       name = (String) attributes.get("name");
     } else if(auth == AuthenticationType.NAVER) {
       Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
       email = (String) response.get("email");
       name = (String) response.get("name");
+    } else if(auth == AuthenticationType.KAKAO) {
+      Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
+      Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+
+      email = (String) kakao_account.get("email");
+      name = (String) properties.get("nickname");
     }
 
     Optional<User> user = userRepository.findByEmail(email);
