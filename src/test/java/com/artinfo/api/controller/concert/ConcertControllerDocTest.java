@@ -10,6 +10,8 @@ import com.artinfo.api.repository.feed.FeedRepository;
 import com.artinfo.api.repository.image.ImageRepository;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.repository.youtube.YoutubeRepository;
+import com.artinfo.api.request.concert.ConcertCreate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,9 +30,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +45,9 @@ public class ConcertControllerDocTest {
 
   @Autowired
   private MockMvc mockMvc;
+
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @Autowired
   private ArtistRepository artistRepository;
@@ -70,6 +75,54 @@ public class ConcertControllerDocTest {
     feedRepository.deleteAll();
     concertRepository.deleteAll();
     artistRepository.deleteAll();
+  }
+
+  @Test
+  @DisplayName("공연 생성")
+  void create() throws Exception {
+    //given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+    userRepository.save(user);
+
+    ConcertCreate request = ConcertCreate.builder()
+      .title("제목")
+      .contents("내용")
+      .linkUrl("test.sample-link-url.com")
+      .posterUrl("test.sample-image-url.com")
+      .location("롯데콘서트홀")
+      .userId(user.getId())
+      .isActive(false)
+      .performanceTime(LocalDateTime.now())
+      .build();
+
+    //expected
+    String json = objectMapper.writeValueAsString(request);
+
+    //expected
+    this.mockMvc.perform(RestDocumentationRequestBuilders.post("/concerts")
+        .contentType(APPLICATION_JSON)
+        .content(json)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("create-concert",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+        requestFields(
+          fieldWithPath("userId").type(JsonFieldType.STRING).description("유저 ID"),
+          fieldWithPath("artistId").type(JsonFieldType.STRING).description("아티스트 ID").optional(),
+          fieldWithPath("title").type(JsonFieldType.STRING).description("공연 제목"),
+          fieldWithPath("contents").type(JsonFieldType.STRING).description("공연 내용"),
+          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("공연 포스터 이미지 주소").optional(),
+          fieldWithPath("posterUrl").type(JsonFieldType.STRING).description("공연 포스터 이미지 주소"),
+          fieldWithPath("location").type(JsonFieldType.STRING).description("공연 장소"),
+          fieldWithPath("performanceTime").type(JsonFieldType.STRING).description("공연 시간"),
+          fieldWithPath("isActive").type(JsonFieldType.BOOLEAN).description("공개 여부").optional()
+        )
+      ));
   }
 
   @Test

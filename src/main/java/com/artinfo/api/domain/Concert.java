@@ -25,7 +25,10 @@ public class Concert {
   @Column(name = "contents", columnDefinition = "text")
   private String contents;
 
-  @Column(name = "category")
+  @Column(name = "contents", columnDefinition = "text")
+  private String contents;
+
+  @Column(name = "category", nullable = true)
   private String category;
 
   @Column(name = "location")
@@ -62,7 +65,7 @@ public class Concert {
   public Concert(String title, String contents, ConcertCategory category, String location, String posterUrl, String linkUrl, LocalDateTime performanceTime, Boolean isActive,User user, Artist artist) {
     this.title = title;
     this.contents = contents;
-    this.category = category.toString();
+    this.category = category != null ? category.toString() : null;
     this.location = location;
     this.posterUrl = posterUrl;
     this.linkUrl = linkUrl;

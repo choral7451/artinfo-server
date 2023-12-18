@@ -60,6 +60,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	implementation 'net.nurigo:sdk:4.3.0'
+
+	// google vision
+	implementation group: 'com.google.cloud', name: 'google-cloud-vision', version: '3.30.0'
 }
 
 test {
