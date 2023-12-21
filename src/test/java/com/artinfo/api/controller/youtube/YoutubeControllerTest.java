@@ -50,8 +50,8 @@ public class YoutubeControllerTest {
   void clean() {
     imageRepository.deleteAll();
     feedRepository.deleteAll();
-    concertRepository.deleteAll();
     youtubeRepository.deleteAll();
+    concertRepository.deleteAll();
     artistRepository.deleteAll();
   }
 

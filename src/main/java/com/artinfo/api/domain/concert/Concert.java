@@ -1,5 +1,7 @@
-package com.artinfo.api.domain;
+package com.artinfo.api.domain.concert;
 
+import com.artinfo.api.domain.Artist;
+import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.enums.ConcertCategory;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -25,9 +27,6 @@ public class Concert {
   @Column(name = "contents", columnDefinition = "text")
   private String contents;
 
-  @Column(name = "contents", columnDefinition = "text")
-  private String contents;
-
   @Column(name = "category", nullable = true)
   private String category;
 
@@ -42,6 +41,9 @@ public class Concert {
 
   @Column(name = "count_of_views")
   private Long countOfViews;
+
+  @Column(name = "keyword_data", columnDefinition = "text", nullable = true)
+  private String keywordData;
 
   @Column(name = "is_active")
   private Boolean isActive;

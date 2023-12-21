@@ -134,6 +134,16 @@ include::{snippets}/get-artists/response-fields.adoc[]
 
 == 공연
 
+=== 공연 키워드 목록 조회
+==== 요청
+include::{snippets}/get-concert-keywords/http-request.adoc[]
+include::{snippets}/get-concert-keywords/curl-request.adoc[]
+include::{snippets}/get-concert-keywords/query-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-concert-keywords/http-response.adoc[]
+include::{snippets}/get-concert-keywords/response-fields.adoc[]
+
 === 공연 생성
 ==== 요청
 include::{snippets}/create-concert/http-request.adoc[]

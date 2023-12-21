@@ -1,7 +1,7 @@
 package com.artinfo.api.controller.concert;
 
 import com.artinfo.api.domain.Artist;
-import com.artinfo.api.domain.Concert;
+import com.artinfo.api.domain.concert.Concert;
 import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.enums.ConcertCategory;
 import com.artinfo.api.repository.artist.ArtistRepository;
@@ -126,8 +126,29 @@ public class ConcertControllerDocTest {
   }
 
   @Test
+  @DisplayName("공연 키워드 목록 조회")
+  void getConcertKeywords() throws Exception {
+    //expected
+    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/concerts/keywords?size=1")
+        .accept(MediaType.APPLICATION_JSON)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("get-concert-keywords",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+        queryParameters(
+          parameterWithName("size").description("키워드 조회 개수").optional()
+            .attributes(key("type").value("Number"))
+        ),
+        responseFields(
+          fieldWithPath("[]").type(JsonFieldType.ARRAY).description("키워드")
+        )
+      ));
+  }
+
+  @Test
   @DisplayName("공연 목록 조회")
-  void getConcert() throws Exception {
+  void getConcerts() throws Exception {
     //given
     User user = User.builder()
       .name("따니엘")
@@ -160,7 +181,7 @@ public class ConcertControllerDocTest {
     concertRepository.saveAll(List.of(concert1, concert2));
 
     //expected
-    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/concerts?page=1&size=2&category=SOLO")
+    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/concerts?page=1&size=2&category=SOLO&keyword=롯데")
         .accept(MediaType.APPLICATION_JSON)
       )
       .andExpect(status().isOk())
@@ -169,6 +190,8 @@ public class ConcertControllerDocTest {
         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
         queryParameters(
           parameterWithName("category").description("콘서트 카테고리").optional()
+            .attributes(key("type").value("String")),
+          parameterWithName("keyword").description("검색 키워드").optional()
             .attributes(key("type").value("String")),
           parameterWithName("page").description("페이지 번호").optional()
             .attributes(key("type").value("Number")),

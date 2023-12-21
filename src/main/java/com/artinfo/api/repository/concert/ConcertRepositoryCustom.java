@@ -1,6 +1,6 @@
 package com.artinfo.api.repository.concert;
 
-import com.artinfo.api.domain.Concert;
+import com.artinfo.api.domain.concert.Concert;
 import com.artinfo.api.request.concert.ConcertSearch;
 
 import java.util.List;

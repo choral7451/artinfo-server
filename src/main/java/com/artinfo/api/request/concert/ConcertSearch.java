@@ -16,6 +16,7 @@ public class ConcertSearch {
   private Integer page;
   private Integer size;
   private ConcertCategory category;
+  private String keyword;
 
   public ConcertSearch() {
     this.page = 1;

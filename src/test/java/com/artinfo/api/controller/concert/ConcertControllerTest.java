@@ -1,6 +1,7 @@
 package com.artinfo.api.controller.concert;
 
 import com.artinfo.api.domain.*;
+import com.artinfo.api.domain.concert.Concert;
 import com.artinfo.api.domain.enums.ConcertCategory;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;

@@ -1,5 +1,6 @@
 package com.artinfo.api.domain;
 
+import com.artinfo.api.domain.concert.Concert;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

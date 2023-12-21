@@ -1,6 +1,6 @@
 package com.artinfo.api.response.concert;
 
-import com.artinfo.api.domain.Concert;
+import com.artinfo.api.domain.concert.Concert;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
