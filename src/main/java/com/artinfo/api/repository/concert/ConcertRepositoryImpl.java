@@ -1,5 +1,6 @@
 package com.artinfo.api.repository.concert;
 
+import com.artinfo.api.domain.Artist;
 import com.artinfo.api.domain.concert.Concert;
 import com.artinfo.api.request.concert.ConcertSearch;
 import com.querydsl.core.BooleanBuilder;
@@ -19,9 +20,9 @@ public class ConcertRepositoryImpl implements ConcertRepositoryCustom {
   private final JPAQueryFactory jpaQueryFactory;
 
   @Override
-  public List<Concert> getListByArtistId(Long artistId) {
+  public List<Concert> getListByArtist(Artist artist) {
     return jpaQueryFactory.selectFrom(concert)
-      .where(concert.artist.id.eq(artistId))
+      .where(concert.artists.contains(artist))
       .orderBy(concert.performanceTime.asc())
       .fetch();
   }

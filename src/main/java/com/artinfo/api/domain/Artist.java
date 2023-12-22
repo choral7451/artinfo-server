@@ -1,6 +1,7 @@
 package com.artinfo.api.domain;
 
 import com.artinfo.api.domain.concert.Concert;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,17 +34,24 @@ public class Artist {
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
   private LocalDateTime createdAt = LocalDateTime.now();
 
-  @OneToMany(mappedBy = "artist")
+  @JsonManagedReference
+  @ManyToMany
+  @JoinTable(
+    name = "artists_concerts",
+    joinColumns = @JoinColumn(name = "artist_id"),
+    inverseJoinColumns = @JoinColumn(name = "concert_id")
+  )
   private List<Concert> concerts;
 
   @OneToMany(mappedBy = "artist")
   private List<Youtube> youtubes;
 
   @Builder
-  public Artist(String koreanName, String englishName, String mainImageUrl) {
+  public Artist(String koreanName, String englishName, String mainImageUrl, List<Concert> concerts) {
     this.koreanName = koreanName;
     this.englishName = englishName;
     this.mainImageUrl = mainImageUrl;
+    this.concerts = concerts;
   }
 
 }

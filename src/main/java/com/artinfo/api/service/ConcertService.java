@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,11 +40,17 @@ public class ConcertService {
     User user = userRepository.findById(concertCreate.getUserId())
       .orElseThrow(UserNotFound::new);
 
-    Artist artist = null;
-    if(concertCreate.getArtistId() != null) {
-      artist = artistRepository.findById(concertCreate.getArtistId())
-        .orElseThrow(ArtistNotFound::new);
+
+    List<Artist> artists = new ArrayList<>();
+    if(concertCreate.getArtistIds() != null && !concertCreate.getArtistIds().isEmpty()) {
+      concertCreate.getArtistIds().forEach(artistId -> {
+        Artist artist = artistRepository.findById(artistId)
+          .orElseThrow(ArtistNotFound::new);
+
+        artists.add(artist);
+      });
     }
+
 
     Concert concert = Concert.builder()
       .title(concertCreate.getTitle())
@@ -53,7 +60,7 @@ public class ConcertService {
       .linkUrl(concertCreate.getLinkUrl())
       .isActive(concertCreate.getIsActive())
       .user(user)
-      .artist(artist)
+      .artist(artists)
       .performanceTime(concertCreate.getPerformanceTime())
       .build();
 
@@ -78,10 +85,10 @@ public class ConcertService {
   }
 
   public List<ArtistConcertResponse> getListByArtistId(Long artistId) {
-    artistRepository.findById(artistId)
+    Artist artist =  artistRepository.findById(artistId)
       .orElseThrow(ArtistNotFound::new);
 
-    return concertRepository.getListByArtistId(artistId).stream()
+    return concertRepository.getListByArtist(artist).stream()
       .map(ArtistConcertResponse::new)
       .collect(Collectors.toList());
   }

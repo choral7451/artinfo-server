@@ -3,6 +3,7 @@ package com.artinfo.api.domain.concert;
 import com.artinfo.api.domain.Artist;
 import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.enums.ConcertCategory;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -52,9 +54,9 @@ public class Concert {
   @JoinColumn(name = "profile_id")
   private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "artist_id", nullable = true)
-  private Artist artist;
+  @JsonBackReference
+  @ManyToMany(mappedBy = "concerts", cascade = CascadeType.REMOVE)
+  private List<Artist> artists;
 
   @Column(name = "performance_time")
   private LocalDateTime performanceTime;
@@ -64,7 +66,7 @@ public class Concert {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Concert(String title, String contents, ConcertCategory category, String location, String posterUrl, String linkUrl, LocalDateTime performanceTime, Boolean isActive,User user, Artist artist) {
+  public Concert(String title, String contents, ConcertCategory category, String location, String posterUrl, String linkUrl, LocalDateTime performanceTime, Boolean isActive,User user, List<Artist> artist) {
     this.title = title;
     this.contents = contents;
     this.category = category != null ? category.toString() : null;
@@ -73,7 +75,7 @@ public class Concert {
     this.linkUrl = linkUrl;
     this.isActive = isActive;
     this.user = user;
-    this.artist = artist;
+    this.artists = artist;
     this.performanceTime = performanceTime;
   }
 }

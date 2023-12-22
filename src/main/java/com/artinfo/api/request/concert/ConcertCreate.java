@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.UUID;
 public class ConcertCreate {
   private UUID userId;
 
-  private Long artistId;
+  private List<Long> artistIds;
 
   private String location;
 
