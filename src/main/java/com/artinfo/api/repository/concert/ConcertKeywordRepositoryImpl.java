@@ -19,6 +19,7 @@ public class ConcertKeywordRepositoryImpl implements ConcertKeywordRepositoryCus
   public List<ConcertKeyword> findTopNByOrderByFetchCountDesc(Integer size) {
     return jpaQueryFactory.selectFrom(concertKeyword)
       .limit(size)
+      .orderBy(concertKeyword.fetchCount.desc())
       .fetch();
   }
 }
