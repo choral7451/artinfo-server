@@ -26,9 +26,9 @@ public class Major {
   @Column(name = "name")
   private String name;
 
-  @JsonBackReference
-  @ManyToMany(mappedBy = "majors", cascade = CascadeType.REMOVE)
-  private List<Job> jobs;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "recruit_job_id")
+  private Job job;
 
   @JsonBackReference
   @ManyToMany(mappedBy = "majors", cascade = CascadeType.REMOVE)
@@ -39,7 +39,8 @@ public class Major {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Major(String name) {
+  public Major(String name, Job job) {
     this.name = name;
+    this.job = job;
   }
 }

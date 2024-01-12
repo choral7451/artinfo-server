@@ -117,21 +117,21 @@ public class JobControllerDocTest {
       .build();
     userRepository.save(user);
 
-    Major major = Major.builder()
-      .name("플루트")
-      .build();
-    majorRepository.save(major);
-
     Job job = Job.builder()
       .userId(user.getId())
       .title("제목")
       .companyName("회사 이름")
       .contents("내용")
       .linkUrl("www.sample_link_url.com")
-      .majors(List.of(major))
       .companyImageUrl("www.sample_company_image_url.com")
       .build();
     jobRepository.save(job);
+
+    Major major = Major.builder()
+      .name("플루트")
+      .job(job)
+      .build();
+    majorRepository.save(major);
 
 
     JobEdit request = JobEdit.builder()
@@ -181,21 +181,21 @@ public class JobControllerDocTest {
       .build();
     userRepository.save(user);
 
-    Major major = Major.builder()
-      .name("플루트")
-      .build();
-    majorRepository.save(major);
-
     Job job = Job.builder()
       .userId(user.getId())
       .title("제목")
       .companyName("회사 이름")
       .contents("내용")
       .linkUrl("www.sample_link_url.com")
-      .majors(List.of(major))
       .companyImageUrl("www.sample_company_image_url.com")
       .build();
     jobRepository.save(job);
+
+    Major major = Major.builder()
+      .name("플루트")
+      .job(job)
+      .build();
+    majorRepository.save(major);
 
 
     this.mockMvc.perform(RestDocumentationRequestBuilders.delete("/jobs/{jobId}", job.getId())
@@ -216,15 +216,6 @@ public class JobControllerDocTest {
   @DisplayName("채용 단건 조회")
   void getJob() throws Exception {
     // given
-    Major major1 = Major.builder()
-      .name("플루트")
-      .build();
-
-    Major major2 = Major.builder()
-      .name("피아노")
-      .build();
-    majorRepository.saveAll(List.of(major1, major2));
-
     Job job = Job.builder()
       .userId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .title("제목")
@@ -232,10 +223,20 @@ public class JobControllerDocTest {
       .contents("내용")
       .linkUrl("www.sample_link_url.com")
       .companyImageUrl("www.sample_company_image_url.com")
-      .majors(List.of(major1,major2))
       .build();
 
     jobRepository.save(job);
+
+    Major major1 = Major.builder()
+      .name("플루트")
+      .job(job)
+      .build();
+
+    Major major2 = Major.builder()
+      .name("피아노")
+      .job(job)
+      .build();
+    majorRepository.saveAll(List.of(major1, major2));
 
     this.mockMvc.perform(RestDocumentationRequestBuilders.get("/jobs/{jobId}", job.getId())
         .accept(MediaType.APPLICATION_JSON)
@@ -265,15 +266,6 @@ public class JobControllerDocTest {
   @DisplayName("채용 목록 조회")
   void getList() throws Exception {
     // given
-    Major major1 = Major.builder()
-      .name("플루트")
-      .build();
-
-    Major major2 = Major.builder()
-      .name("피아노")
-      .build();
-    majorRepository.saveAll(List.of(major1, major2));
-
     Job job1 = Job.builder()
       .userId(UUID.fromString("ef03de92-798d-4aa8-a750-831e97f8e889"))
       .title("제목1")
@@ -281,7 +273,6 @@ public class JobControllerDocTest {
       .contents("내용1")
       .linkUrl("www.sample_link_url_1.com")
       .companyImageUrl("www.sample_company_image_url_1.com")
-      .majors(List.of(major1,major2))
       .build();
 
     Job job2 = Job.builder()
@@ -291,10 +282,20 @@ public class JobControllerDocTest {
       .contents("내용2")
       .linkUrl("www.sample_link_url_2.com")
       .companyImageUrl("www.sample_company_image_url_2.com")
-      .majors(List.of(major2))
       .build();
 
     jobRepository.saveAll(List.of(job1, job2));
+
+    Major major1 = Major.builder()
+      .name("플루트")
+      .job(job1)
+      .build();
+
+    Major major2 = Major.builder()
+      .name("피아노")
+      .job(job2)
+      .build();
+    majorRepository.saveAll(List.of(major1, major2));
 
 
 

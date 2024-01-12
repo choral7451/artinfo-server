@@ -41,13 +41,7 @@ public class Job {
   @Column(name = "contents", columnDefinition = "text")
   private String contents;
 
-  @JsonManagedReference
-  @ManyToMany
-  @JoinTable(
-    name = "recruit_jobs_majors",
-    joinColumns = @JoinColumn(name = "recruit_job_id"),
-    inverseJoinColumns = @JoinColumn(name = "major_id")
-  )
+  @OneToMany(mappedBy = "job",cascade = CascadeType.REMOVE)
   private List<Major> majors;
 
   @Column(name = "is_active")
@@ -58,14 +52,13 @@ public class Job {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Job(UUID userId, String title, String companyName, String companyImageUrl, String linkUrl, String contents, List<Major> majors) {
+  public Job(UUID userId, String title, String companyName, String companyImageUrl, String linkUrl, String contents) {
     this.userId = userId;
     this.title = title;
     this.companyName = companyName;
     this.companyImageUrl = companyImageUrl;
     this.linkUrl = linkUrl;
     this.contents = contents;
-    this.majors = majors;
   }
 
   public void edit(JobEditor editor) {
@@ -74,6 +67,5 @@ public class Job {
     this.companyImageUrl = editor.getCompanyImageUrl();
     this.linkUrl = editor.getLinkUrl();
     this.contents = editor.getContents();
-    this.majors = editor.getMajors();
   }
 }

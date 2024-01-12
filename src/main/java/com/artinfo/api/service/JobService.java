@@ -20,10 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,18 +36,6 @@ public class JobService {
     userRepository.findById(jobCreate.getUserId())
       .orElseThrow(UserNotFound::new);
 
-    List<Major> majors = new ArrayList<>();
-    for(String major: jobCreate.getMajors()) {
-      Optional<Major> fetchedMajor = majorRepository.findByName(major);
-      if(fetchedMajor.isPresent()) {
-        majors.add(fetchedMajor.get());
-      } else {
-        Major CreatedMajor = Major.builder().name(major).build();
-        majorRepository.save(CreatedMajor);
-        majors.add(CreatedMajor);
-      }
-    }
-
     String companyImageUrl = jobCreate.getCompanyImageUrl();
     if(jobCreate.getCompanyImageUrl() == null || jobCreate.getCompanyImageUrl().isEmpty()) {
       companyImageUrl = appConfig.jobDefault;
@@ -63,10 +48,16 @@ public class JobService {
       .companyName(jobCreate.getCompanyName())
       .companyImageUrl(companyImageUrl)
       .linkUrl(jobCreate.getLinkUrl())
-      .majors(majors)
       .build();
 
     jobRepository.save(job);
+
+    List<Major> majors = jobCreate.getMajors()
+      .stream()
+      .map(major -> Major.builder().name(major).job(job).build())
+      .toList();
+
+    majorRepository.saveAll(majors);
   }
 
   @Transactional
@@ -77,17 +68,13 @@ public class JobService {
     Job job = jobRepository.findById(jobId)
       .orElseThrow(JobNotFound::new);
 
-    List<Major> majors = new ArrayList<>();
-    for(String major: jobEdit.getMajors()) {
-      Optional<Major> fetchedMajor = majorRepository.findByName(major);
-      if(fetchedMajor.isPresent()) {
-        majors.add(fetchedMajor.get());
-      } else {
-        Major CreatedMajor = Major.builder().name(major).build();
-        majorRepository.save(CreatedMajor);
-        majors.add(CreatedMajor);
-      }
-    }
+    majorRepository.deleteAllByJob(job);
+
+    List<Major> majors = jobEdit.getMajors()
+      .stream()
+      .map(major -> Major.builder().name(major).job(job).build())
+      .toList();
+    majorRepository.saveAll(majors);
 
     String companyImageUrl = jobEdit.getCompanyImageUrl();
     if(jobEdit.getCompanyImageUrl() == null || jobEdit.getCompanyImageUrl().isEmpty()) {
@@ -100,7 +87,6 @@ public class JobService {
       .companyImageUrl(companyImageUrl)
       .linkUrl(jobEdit.getLinkUrl())
       .contents(jobEdit.getContents())
-      .majors(majors)
       .build();
 
     job.edit(jobEditor);
@@ -114,10 +100,10 @@ public class JobService {
     jobRepository.deleteById(id);
   }
 
-  public List<JobResponse> getList(JobSearch jobSearch) {
-    return jobRepository.getList(jobSearch).stream()
-      .map(JobResponse::new)
-      .collect(Collectors.toList());
+  public List<JobResponse> getList(JobSearch request) {
+    return (request.getMajor() != null)
+      ? getJobsByMajors(request)
+      : getAllJobs(request);
   }
   public JobDetailResponse get(Long id) {
     Job job = jobRepository.findById(id)
@@ -133,5 +119,21 @@ public class JobService {
       .contents(job.getContents())
       .majors(job.getMajors().stream().map(Major::getName).toList())
       .build();
+  }
+
+  private List<JobResponse> getJobsByMajors(JobSearch request) {
+    log.info("?>>>>>>>>>>>>>>>{}",request.getMajor());
+    return jobRepository.findByMajors_NameIn(request.getMajor(), request.toPageable())
+      .stream()
+      .map(JobResponse::new)
+      .toList();
+  }
+
+
+  private List<JobResponse> getAllJobs(JobSearch request) {
+    return jobRepository.findAll(request.toPageable())
+      .stream()
+      .map(JobResponse::new)
+      .toList();
   }
 }

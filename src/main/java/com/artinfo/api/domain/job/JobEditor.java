@@ -14,15 +14,13 @@ public class JobEditor {
   private final String companyImageUrl;
   private final String linkUrl;
   private final String contents;
-  private final List<Major> majors;
 
   @Builder
-  public JobEditor(String title, String companyName, String companyImageUrl,String linkUrl, String contents, List<Major> majors) {
+  public JobEditor(String title, String companyName, String companyImageUrl,String linkUrl, String contents) {
     this.title = title;
     this.companyName = companyName;
     this.companyImageUrl = companyImageUrl;
     this.linkUrl = linkUrl;
     this.contents = contents;
-    this.majors = majors;
   }
 }
