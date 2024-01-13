@@ -6,6 +6,7 @@ import com.artinfo.api.repository.job.JobRepository;
 import com.artinfo.api.repository.user.UserRepository;
 import com.artinfo.api.request.job.JobCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,10 @@ class JobControllerTest {
   @Autowired
   private UserRepository userRepository;
 
-//  @BeforeEach
-//  void clean() {
-//
-//  }
+  @BeforeEach
+  void clean() {
+    userRepository.deleteAll();
+  }
 
   @Test
   @DisplayName("채용 단건 조회")

@@ -73,8 +73,9 @@ public class ConcertControllerDocTest {
     youtubeRepository.deleteAll();
     imageRepository.deleteAll();
     feedRepository.deleteAll();
-    concertRepository.deleteAll();
     artistRepository.deleteAll();
+    concertRepository.deleteAll();
+    userRepository.deleteAll();
   }
 
   @Test

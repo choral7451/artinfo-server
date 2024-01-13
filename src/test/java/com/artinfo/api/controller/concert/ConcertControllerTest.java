@@ -58,6 +58,7 @@ class ConcertControllerTest {
 
   @BeforeEach
   void clean() {
+    userRepository.deleteAll();
     youtubeRepository.deleteAll();
     imageRepository.deleteAll();
     feedRepository.deleteAll();
