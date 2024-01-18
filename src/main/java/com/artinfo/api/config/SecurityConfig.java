@@ -28,7 +28,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 
 @Slf4j
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
   private final CustomOauth2Service customOauth2Service;

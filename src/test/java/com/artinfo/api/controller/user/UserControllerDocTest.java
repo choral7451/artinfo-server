@@ -79,7 +79,7 @@ public class UserControllerDocTest {
 
   @Test
   @DisplayName("유저 단건 조회")
-  void getLesson() throws Exception {
+  void getUser() throws Exception {
     //given
     User user = User.builder()
       .name("따니엘")
