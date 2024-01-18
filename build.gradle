@@ -6,7 +6,7 @@ plugins {
 }
 
 ext {
-	apiVersion = "0.17.1"
+	apiVersion = "1.0.0"
 	asciidocVersion = "3.0.0"
 	snippetsDir = file('build/generated-snippets')
 }
@@ -47,7 +47,6 @@ dependencies {
 
 	asciidoctorExt "org.springframework.restdocs:spring-restdocs-asciidoctor:${asciidocVersion}"
 	testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc:${asciidocVersion}"
-
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-test'

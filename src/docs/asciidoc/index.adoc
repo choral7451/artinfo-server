@@ -223,3 +223,21 @@ include::{snippets}/get-youtubes-by-artistId/path-parameters.adoc[]
 ==== 응답
 include::{snippets}/get-youtubes-by-artistId/http-response.adoc[]
 include::{snippets}/get-youtubes-by-artistId/response-fields.adoc[]
+
+== 시스템
+=== 통계 조회
+==== 요청
+include::{snippets}/get-statistics/http-request.adoc[]
+include::{snippets}/get-statistics/curl-request.adoc[]
+
+==== 응답
+include::{snippets}/get-statistics/http-response.adoc[]
+include::{snippets}/get-statistics/response-fields.adoc[]
+
+=== 방문자 수 증가
+==== 요청
+include::{snippets}/increase-visitors/http-request.adoc[]
+include::{snippets}/increase-visitors/curl-request.adoc[]
+
+==== 응답
+include::{snippets}/increase-visitors/http-response.adoc[]
