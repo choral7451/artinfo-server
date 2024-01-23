@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface JobRepository extends JpaRepository<Job, Long> {
   @Override
-  @Query("select j from Job j join fetch j.majors")
+  @Query("select j from Job j left join fetch j.majors")
   Page<Job> findAll(Pageable pageable);
 
-  @Query("select j from Job j join fetch j.majors m where m.name in :majors")
+  @Query("select j from Job j left join fetch j.majors m where m.name in :majors")
   Page<Job> findByMajors_NameIn(List<String> majors, Pageable pageable);
 }
