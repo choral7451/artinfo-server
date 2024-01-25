@@ -101,10 +101,11 @@ public class JobService {
   }
 
   public List<JobResponse> getList(JobSearch request) {
-    return (request.getMajor() != null)
-      ? getJobsByMajors(request)
-      : getAllJobs(request);
+    return jobRepository.findListByMajors(request).stream()
+      .map(JobResponse::new)
+      .toList();
   }
+
   public JobDetailResponse get(Long id) {
     Job job = jobRepository.findById(id)
       .orElseThrow(JobNotFound::new);
@@ -119,21 +120,5 @@ public class JobService {
       .contents(job.getContents())
       .majors(job.getMajors().stream().map(Major::getName).toList())
       .build();
-  }
-
-  private List<JobResponse> getJobsByMajors(JobSearch request) {
-    log.info("?>>>>>>>>>>>>>>>{}",request.getMajor());
-    return jobRepository.findByMajors_NameIn(request.getMajor(), request.toPageable())
-      .stream()
-      .map(JobResponse::new)
-      .toList();
-  }
-
-
-  private List<JobResponse> getAllJobs(JobSearch request) {
-    return jobRepository.findAll(request.toPageable())
-      .stream()
-      .map(JobResponse::new)
-      .toList();
   }
 }
