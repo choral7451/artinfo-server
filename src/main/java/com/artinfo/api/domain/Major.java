@@ -2,7 +2,6 @@ package com.artinfo.api.domain;
 
 import com.artinfo.api.domain.job.Job;
 import com.artinfo.api.domain.lesson.Lesson;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -30,17 +28,18 @@ public class Major {
   @JoinColumn(name = "recruit_job_id")
   private Job job;
 
-  @JsonBackReference
-  @ManyToMany(mappedBy = "majors", cascade = CascadeType.REMOVE)
-  private List<Lesson> lessons;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "lesson_id")
+  private Lesson lesson;
 
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Major(String name, Job job) {
+  public Major(String name, Job job, Lesson lesson) {
     this.name = name;
     this.job = job;
+    this.lesson = lesson;
   }
 }

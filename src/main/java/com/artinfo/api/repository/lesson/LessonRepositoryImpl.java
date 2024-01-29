@@ -1,15 +1,14 @@
 package com.artinfo.api.repository.lesson;
 
-import com.artinfo.api.domain.QLocation;
-import com.artinfo.api.domain.QMajor;
 import com.artinfo.api.domain.lesson.Lesson;
-import com.artinfo.api.domain.lesson.QLesson;
 import com.artinfo.api.request.lesson.LessonSearch;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+
+import static com.artinfo.api.domain.lesson.QLesson.lesson;
 
 @RequiredArgsConstructor
 public class LessonRepositoryImpl implements LessonsRepositoryCustom {
@@ -18,30 +17,37 @@ public class LessonRepositoryImpl implements LessonsRepositoryCustom {
 
   @Override
   public List<Lesson> getList(LessonSearch lessonSearch) {
-    QLesson lesson = QLesson.lesson;
-    QLocation location = QLocation.location;
-    QMajor major = QMajor.major;
+    List<Long> ids = findLessonIds(lessonSearch);
 
-    var query = jpaQueryFactory.selectFrom(lesson);
+    return findLessonsByIds(ids);
+  }
 
-    if (lessonSearch.getLocation() != null && !lessonSearch.getLocation().isEmpty()) {
-      BooleanExpression locationCondition = null;
-      for (String loc : lessonSearch.getLocation()) {
-        BooleanExpression currentCondition = location.name.like("%" + loc + "%");
-        locationCondition = locationCondition == null ? currentCondition : locationCondition.or(currentCondition);
-      }
-      query.leftJoin(lesson.locations, location).where(locationCondition);
-    }
-
-    if (lessonSearch.getMajor() != null && !lessonSearch.getMajor().isEmpty()) {
-      query.leftJoin(lesson.majors, major)
-        .where(major.name.in(lessonSearch.getMajor()));
-    }
-
-    return query.distinct()
+  private List<Long> findLessonIds(LessonSearch lessonSearch) {
+    JPAQuery<Long> jpaQuery = jpaQueryFactory.select(lesson.id)
+      .from(lesson)
       .limit(lessonSearch.getSize())
       .offset(lessonSearch.getOffset())
-      .orderBy(lesson.id.desc())
+      .orderBy(lesson.createdAt.desc());
+
+    if (lessonSearch.getMajor() != null && !lessonSearch.getMajor().isEmpty()) {
+      jpaQuery = jpaQuery.where(lesson.majors.any().name.in(lessonSearch.getMajor()));
+    }
+
+    if (lessonSearch.getLocation() != null && !lessonSearch.getLocation().isEmpty()) {
+      jpaQuery = jpaQuery.where(lesson.locations.any().name.in(lessonSearch.getLocation()));
+    }
+
+    return jpaQuery.fetch();
+  }
+
+  private List<Lesson> findLessonsByIds(List<Long> ids) {
+    return jpaQueryFactory.selectFrom(lesson)
+      .leftJoin(lesson.majors)
+      .fetchJoin()
+      .leftJoin(lesson.locations)
+      .fetchJoin()
+      .where(lesson.id.in(ids))
+      .orderBy(lesson.createdAt.desc())
       .fetch();
   }
 }

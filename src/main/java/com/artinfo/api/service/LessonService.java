@@ -78,34 +78,8 @@ public class LessonService {
     //todo 추후 삭제 필요
     user.editIsTeacher(true);
 
-    List<Location> locations = new ArrayList<>();
-    for(String location: lessonCreate.getLocations()) {
-      Optional<Location> fetchedLocation = locationRepository.findByName(location);
-      if(fetchedLocation.isPresent()) {
-        locations.add(fetchedLocation.get());
-      } else {
-        Location CreatedLocation = Location.builder().name(location).build();
-        locationRepository.save(CreatedLocation);
-        locations.add(CreatedLocation);
-      }
-    }
-
-    List<Major> majors = new ArrayList<>();
-    for(String major: lessonCreate.getMajors()) {
-      Optional<Major> fetchedMajor = majorRepository.findByName(major);
-      if(fetchedMajor.isPresent()) {
-        majors.add(fetchedMajor.get());
-      } else {
-        Major CreatedMajor = Major.builder().name(major).build();
-        majorRepository.save(CreatedMajor);
-        majors.add(CreatedMajor);
-      }
-    }
-
     Lesson lesson = Lesson.builder()
       .user(user)
-      .locations(locations)
-      .majors(majors)
       .imageUrl(lessonCreate.getImageUrl())
       .name(lessonCreate.getName())
       .phone(lessonCreate.getPhone())
@@ -114,6 +88,22 @@ public class LessonService {
       .build();
 
     lessonRepository.save(lesson);
+
+    List<Location> locations = lessonCreate.getLocations().stream()
+      .map(location -> Location.builder()
+        .name(location)
+        .lesson(lesson)
+        .build()).toList();
+
+    locationRepository.saveAll(locations);
+
+    List<Major> majors = lessonCreate.getMajors().stream()
+      .map(major -> Major.builder()
+        .name(major)
+        .lesson(lesson)
+        .build()).toList();
+
+    majorRepository.saveAll(majors);
 
     List<Degree> degrees = lessonCreate.getDegrees().stream()
       .map(degreeMap -> {
@@ -133,74 +123,62 @@ public class LessonService {
   }
 
   @Transactional
-  public void edit(Long lessonId, LessonEdit lessonEdit) {
-    User user = userRepository.findById(lessonEdit.getUserId())
-      .orElseThrow(UserNotFound::new);
+    public void edit(Long lessonId, LessonEdit lessonEdit) {
+      User user = userRepository.findById(lessonEdit.getUserId())
+        .orElseThrow(UserNotFound::new);
 
-    Lesson lesson = lessonRepository.findById(lessonId)
+      Lesson lesson = lessonRepository.findById(lessonId)
         .orElseThrow(LessonNotFound::new);
 
-
-    List<Location> locations = new ArrayList<>();
-    for(String location: lessonEdit.getLocations()) {
-      Optional<Location> fetchedLocation = locationRepository.findByName(location);
-      if(fetchedLocation.isPresent()) {
-        locations.add(fetchedLocation.get());
-      } else {
-        Location CreatedLocation = Location.builder().name(location).build();
-        locationRepository.save(CreatedLocation);
-        locations.add(CreatedLocation);
-      }
-    }
-
-    List<Major> majors = new ArrayList<>();
-    for(String major: lessonEdit.getMajors()) {
-      Optional<Major> fetchedMajor = majorRepository.findByName(major);
-      if(fetchedMajor.isPresent()) {
-        majors.add(fetchedMajor.get());
-      } else {
-        Major CreatedMajor = Major.builder().name(major).build();
-        majorRepository.save(CreatedMajor);
-        majors.add(CreatedMajor);
-      }
-    }
-
-    degreeRepository.deleteByUserId(user.getId());
-
-    List<Degree> degrees = lessonEdit.getDegrees().stream()
-      .map(degreeMap -> {
-        String degreeType = degreeMap.keySet().iterator().next();
-        String campusName = degreeMap.get(degreeType);
-
-        return Degree.builder()
-          .user(user)
+      locationRepository.deleteAllByLesson(lesson);
+      List<Location> locations = lessonEdit.getLocations().stream()
+        .map(location -> Location.builder()
+          .name(location)
           .lesson(lesson)
-          .degree(degreeType)
-          .campusName(campusName)
-          .build();
-      })
-      .collect(Collectors.toList());
+          .build()).toList();
+      locationRepository.saveAll(locations);
 
-    degreeRepository.saveAll(degrees);
+      majorRepository.deleteAllByLesson(lesson);
+      List<Major> majors = lessonEdit.getMajors().stream()
+        .map(major -> Major.builder()
+          .name(major)
+          .lesson(lesson)
+          .build()).toList();
+      majorRepository.saveAll(majors);
 
-    LessonEditor lessonEditor = LessonEditor.builder()
-      .imageUrl(lessonEdit.getImageUrl())
-      .locations(locations)
-      .name(lessonEdit.getName())
-      .majors(majors)
-      .phone(lessonEdit.getPhone())
-      .fee(lessonEdit.getFee())
-      .intro(lessonEdit.getIntro())
-      .degrees(degrees)
-      .build();
+      degreeRepository.deleteByUserId(user.getId());
+      List<Degree> degrees = lessonEdit.getDegrees().stream()
+        .map(degreeMap -> {
+          String degreeType = degreeMap.keySet().iterator().next();
+          String campusName = degreeMap.get(degreeType);
 
-    lesson.edit(lessonEditor);
+          return Degree.builder()
+            .user(user)
+            .lesson(lesson)
+            .degree(degreeType)
+            .campusName(campusName)
+            .build();
+        })
+        .collect(Collectors.toList());
+
+      degreeRepository.saveAll(degrees);
+
+      LessonEditor lessonEditor = LessonEditor.builder()
+        .imageUrl(lessonEdit.getImageUrl())
+        .locations(locations)
+        .name(lessonEdit.getName())
+        .majors(majors)
+        .phone(lessonEdit.getPhone())
+        .fee(lessonEdit.getFee())
+        .intro(lessonEdit.getIntro())
+        .degrees(degrees)
+        .build();
+
+      lesson.edit(lessonEditor);
   }
 
   @Transactional
   public void delete(Long id) {
-
-    //todo 추후 삭제 필요
     Lesson lesson = lessonRepository.findById(id)
       .orElseThrow(LessonNotFound::new);
 
