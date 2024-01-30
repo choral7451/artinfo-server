@@ -57,8 +57,7 @@ public class LessonRepositoryImpl implements LessonsRepositoryCustom {
   private List<Lesson> findLessonsByIds(List<Long> ids) {
     return jpaQueryFactory.selectFrom(lesson)
       .leftJoin(lesson.majors)
-      .rightJoin(lesson.locations)
-      .fetchJoin()
+      .leftJoin(lesson.locations)
       .where(lesson.id.in(ids))
       .orderBy(lesson.createdAt.desc())
       .fetch();

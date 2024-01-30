@@ -157,22 +157,10 @@ class LessonControllerTest {
 
     userRepository.save(user);
 
-    Location location = Location.builder()
-      .name("서울 1")
-      .build();
-    locationRepository.save(location);
-
-    Major major = Major.builder()
-      .name("오르간")
-      .build();
-    majorRepository.save(major);
-
     Lesson lesson = Lesson.builder()
       .user(user)
       .imageUrl("https://artinfokorea.com/_next/image?url=https%3A%2F%2Fycuajmirzlqpgzuonzca.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fartinfo%2Flessons%2F17%2F1698037484500.54&w=256&q=100")
-      .locations(List.of(location))
       .name("김규성")
-      .majors(List.of(major))
       .phone("010-4028-7451")
       .fee(80000)
       .intro("안녕하세요 미국에서 피아노 석사학위를 따고 한국에 들어온 김규성입니다.\n" +
@@ -181,6 +169,18 @@ class LessonControllerTest {
       .build();
     lessonRepository.save(lesson);
 
+
+    Location location = Location.builder()
+      .name("서울 1")
+      .lesson(lesson)
+      .build();
+    locationRepository.save(location);
+
+    Major major = Major.builder()
+      .name("오르간")
+      .lesson(lesson)
+      .build();
+    majorRepository.save(major);
 
     LessonEdit request = LessonEdit.builder()
       .userId(user.getId())
@@ -216,22 +216,11 @@ class LessonControllerTest {
 
     userRepository.save(user);
 
-    Location location = Location.builder()
-      .name("서울 전체")
-      .build();
-    locationRepository.save(location);
-
-    Major major = Major.builder()
-      .name("오르간")
-      .build();
-    majorRepository.save(major);
 
     Lesson lesson = Lesson.builder()
       .user(user)
       .imageUrl("https://artinfokorea.com/_next/image?url=https%3A%2F%2Fycuajmirzlqpgzuonzca.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fartinfo%2Flessons%2F17%2F1698037484500.54&w=256&q=100")
-      .locations(List.of(location))
       .name("김규성")
-      .majors(List.of(major))
       .phone("010-4028-7451")
       .fee(80000)
       .intro("안녕하세요 미국에서 피아노 석사학위를 따고 한국에 들어온 김규성입니다.\n" +
@@ -239,6 +228,18 @@ class LessonControllerTest {
         "위 번호로 연락 주시면 성실히 답해드리도록 하겠습니다. :D")
       .build();
     lessonRepository.save(lesson);
+
+    Location location = Location.builder()
+      .name("서울 전체")
+      .lesson(lesson)
+      .build();
+    locationRepository.save(location);
+
+    Major major = Major.builder()
+      .name("오르간")
+      .lesson(lesson)
+      .build();
+    majorRepository.save(major);
 
     //expected
     mockMvc.perform(delete("/lessons/{lessonId}", lesson.getId())
