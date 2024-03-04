@@ -1,5 +1,6 @@
 package com.artinfo.api.domain;
 
+import com.artinfo.api.domain.enums.FeedCategory;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,6 @@ import java.util.List;
 @Table(name = "feeds")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -41,6 +41,10 @@ public class Feed {
   @Column(name = "is_ad")
   private Boolean isAd = false;
 
+  @Column(name = "category")
+  @Enumerated(EnumType.STRING)
+  private FeedCategory category;
+  
   @OneToMany(mappedBy = "feed")
   private List<Image> images;
 
@@ -48,7 +52,7 @@ public class Feed {
   private List<Like> likes;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "artist_id", nullable = true)
+  @JoinColumn(name = "artist_id")
   private Artist artist;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -60,9 +64,10 @@ public class Feed {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Feed(String title, String contents, Artist artist, User user) {
+  public Feed(String title, String contents, FeedCategory category, Artist artist, User user) {
     this.title = title;
     this.contents = contents;
+    this.category = category;
     this.artist = artist;
     this.user = user;
   }

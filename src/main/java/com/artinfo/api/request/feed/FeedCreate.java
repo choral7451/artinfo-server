@@ -1,5 +1,6 @@
 package com.artinfo.api.request.feed;
 
+import com.artinfo.api.domain.enums.FeedCategory;
 import com.artinfo.api.exception.InvalidRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -21,6 +22,8 @@ public class FeedCreate {
 
   @NotBlank(message = "내용을 입력해 주세요.")
   private String contents;
+
+  private FeedCategory category;
 
   private List<String> imageUrls;
 

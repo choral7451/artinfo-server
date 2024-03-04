@@ -1,6 +1,7 @@
 package com.artinfo.api.service;
 
 import com.artinfo.api.domain.*;
+import com.artinfo.api.domain.enums.FeedCategory;
 import com.artinfo.api.exception.ArtistNotFound;
 import com.artinfo.api.exception.FeedNotFound;
 import com.artinfo.api.exception.UserNotFound;
@@ -39,19 +40,31 @@ public class FeedService {
 
     List<UUID> likedUserIds = feed.getLikes().stream().map(Like::getUserId).toList();
 
-    return FeedDetailResponse.builder()
+    FeedDetailResponse.FeedDetailResponseBuilder feedDetailResponseBuilder = FeedDetailResponse.builder()
       .feedId(feed.getId())
       .authorId(feed.getUser().getId())
       .authorName(feed.getUser().getName())
       .authorIconImageUrl(feed.getUser().getIconImageUrl())
       .title(feed.getTitle())
       .contents(feed.getContents())
+      .category(feed.getCategory())
       .imageUrls(feed.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
       .countOfLikes(feed.getCountOfLikes())
       .countOfComments(feed.getCountOfComments())
       .isLiking(likedUserIds.contains(requestUserId))
-      .createdAt(feed.getCreatedAt())
-      .build();
+      .createdAt(feed.getCreatedAt());
+
+    if(feed.getCategory() == FeedCategory.ARTIST) {
+      feedDetailResponseBuilder.artistId(feed.getArtist().getId());
+    }
+
+    if(feed.getCategory() == FeedCategory.CHOIR || feed.getCategory() == FeedCategory.ORCHESTRA) {
+      feedDetailResponseBuilder.authorName(feed.getUser().getSecretNickname());
+    } else {
+      feedDetailResponseBuilder.authorName(feed.getUser().getPublicNickname());
+    }
+
+    return feedDetailResponseBuilder.build();
   }
 
   public void delete(Long feedId) {
@@ -70,19 +83,27 @@ public class FeedService {
     return feedRepository.getList(feedSearch).stream()
       .map(feed -> {
         List<UUID> likedUserIds = feed.getLikes().stream().map(Like::getUserId).toList();
-        return FeedResponse.builder()
+        FeedResponse.FeedResponseBuilder feedBuilder = FeedResponse.builder()
           .feedId(feed.getId())
           .authorId(feed.getUser().getId())
-          .authorName(feed.getUser().getName())
           .authorIconImageUrl(feed.getUser().getIconImageUrl())
           .title(feed.getTitle())
           .contents(feed.getContents())
+          .category(feed.getCategory())
           .imageUrls(feed.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
           .countOfLikes(feed.getCountOfLikes())
           .countOfComments(feed.getCountOfComments())
           .isLiking(likedUserIds.contains(feedSearch.getRequestUserId()))
-          .createdAt(feed.getCreatedAt())
-          .build();
+          .createdAt(feed.getCreatedAt());
+
+        if(feedSearch.getCategory() == FeedCategory.CHOIR || feedSearch.getCategory() == FeedCategory.ORCHESTRA) {
+          feedBuilder.authorName(feed.getUser().getSecretNickname());
+        } else {
+          feedBuilder.authorName(feed.getUser().getPublicNickname());
+        }
+
+        return feedBuilder.build();
+
       })
       .collect(Collectors.toList());
   }
@@ -92,15 +113,21 @@ public class FeedService {
     User user = userRepository.findById(feedCreate.getUserId())
       .orElseThrow(UserNotFound::new);
 
-    Artist artist = artistRepository.findById(feedCreate.getArtistId())
-      .orElseThrow(ArtistNotFound::new);
-
-    Feed feed = Feed.builder()
+    Feed.FeedBuilder feedBuilder = Feed.builder()
       .title(feedCreate.getTitle())
       .contents(feedCreate.getContents())
-      .artist(artist)
-      .user(user)
-      .build();
+      .category(feedCreate.getCategory())
+      .user(user);
+
+    Artist artist;
+    if(feedCreate.getArtistId() != null) {
+      artist = artistRepository.findById(feedCreate.getArtistId())
+        .orElseThrow(ArtistNotFound::new);
+
+      feedBuilder.artist(artist);
+    }
+
+    Feed feed = feedBuilder.build();
 
     feedRepository.save(feed);
 

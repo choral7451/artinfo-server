@@ -4,6 +4,25 @@
 :toc: left
 
 == 유저
+=== 내 정보 조회
+==== 요청
+include::{snippets}/get-me/http-request.adoc[]
+include::{snippets}/get-me/curl-request.adoc[]
+include::{snippets}/get-me/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-me/http-response.adoc[]
+include::{snippets}/get-me/response-fields.adoc[]
+
+=== 내 정보 수정
+==== 요청
+include::{snippets}/edit-user/http-request.adoc[]
+include::{snippets}/edit-user/curl-request.adoc[]
+include::{snippets}/edit-user/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/edit-user/http-response.adoc[]
+
 === 유저 단건 조회
 ==== 요청
 include::{snippets}/get-user/http-request.adoc[]
@@ -13,6 +32,15 @@ include::{snippets}/get-user/path-parameters.adoc[]
 ==== 응답
 include::{snippets}/get-user/http-response.adoc[]
 include::{snippets}/get-user/response-fields.adoc[]
+
+=== 소속 단체 인증
+==== 요청
+include::{snippets}/create-company-certification/http-request.adoc[]
+include::{snippets}/create-company-certification/curl-request.adoc[]
+include::{snippets}/create-company-certification/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/create-company-certification/http-response.adoc[]
 
 == 레슨
 === 레슨 생성

@@ -1,5 +1,6 @@
 package com.artinfo.api.response.feed;
 
+import com.artinfo.api.domain.enums.FeedCategory;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class FeedResponse {
   private final String authorIconImageUrl;
   private final String title;
   private final String contents;
+  private final FeedCategory category;
   private final List<String> imageUrls;
   private final Integer countOfLikes;
   private final Integer countOfComments;

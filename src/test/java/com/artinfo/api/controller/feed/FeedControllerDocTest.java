@@ -1,6 +1,7 @@
 package com.artinfo.api.controller.feed;
 
 import com.artinfo.api.domain.*;
+import com.artinfo.api.domain.enums.FeedCategory;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertRepository;
 import com.artinfo.api.repository.feed.FeedRepository;
@@ -84,15 +85,25 @@ public class FeedControllerDocTest {
     //given
     User user = User.builder()
       .name("따니엘")
+      .publicNickname("따니엘")
       .email("artinfokorea2022@gmail.com")
       .password("a123456!")
       .build();
     userRepository.save(user);
 
+    Artist artist = Artist.builder()
+      .koreanName("서울시립교향악단")
+      .englishName("SPO")
+      .mainImageUrl("https://ycuajmirzlqpgzuonzca.supabase.co/storage/v1/object/public/artinfo/artists/seoul_philharmonic_orchestra.png")
+      .build();
+    artistRepository.save(artist);
+
     Feed feed = Feed.builder()
       .title("제목")
       .contents("내용")
+      .category(FeedCategory.ARTIST)
       .user(user)
+      .artist(artist)
       .build();
     feedRepository.save(feed);
 
@@ -127,10 +138,12 @@ public class FeedControllerDocTest {
         responseFields(
           fieldWithPath("feedId").type(JsonFieldType.NUMBER).description("피드 ID"),
           fieldWithPath("authorId").type(JsonFieldType.STRING).description("작성자 ID"),
+          fieldWithPath("artistId").type(JsonFieldType.NUMBER).description("아티스트 ID").optional(),
           fieldWithPath("authorName").type(JsonFieldType.STRING).description("작성자 이름"),
           fieldWithPath("authorIconImageUrl").type(JsonFieldType.STRING).description("작성자 아이콘 이미지 주소").optional(),
           fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
           fieldWithPath("contents").type(JsonFieldType.STRING).description("피드 내용"),
+          fieldWithPath("category").type(JsonFieldType.STRING).description("피드 카테고리"),
           fieldWithPath("imageUrls").type(JsonFieldType.ARRAY).description("이미지 주소 목록"),
           fieldWithPath("countOfLikes").type(JsonFieldType.NUMBER).description("피드 좋아요 수"),
           fieldWithPath("countOfComments").type(JsonFieldType.NUMBER).description("피드 댓글 수"),
@@ -184,6 +197,7 @@ public class FeedControllerDocTest {
     //given
     User user = User.builder()
       .name("따니엘")
+      .publicNickname("따니엘")
       .email("artinfokorea2022@gmail.com")
       .password("a123456!")
       .build();
@@ -200,12 +214,14 @@ public class FeedControllerDocTest {
       .title("제목1")
       .contents("내용1")
       .user(user)
+      .category(FeedCategory.ARTIST)
       .artist(artist)
       .build();
 
     Feed feed2 = Feed.builder()
       .title("제목2")
       .contents("내용2")
+      .category(FeedCategory.ARTIST)
       .user(user)
       .artist(artist)
       .build();
@@ -238,8 +254,10 @@ public class FeedControllerDocTest {
         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
         queryParameters(
           parameterWithName("artistId").description("아티스트 ID")
-            .attributes(key("type").value("Number")),
+            .attributes(key("type").value("Number")).optional(),
           parameterWithName("requestUserId").description("요청 유저 ID").optional()
+            .attributes(key("type").value("String")),
+          parameterWithName("category").description("피드 카테고리 [ ARTIST, CHOIR, ORCHESTRA ]").optional()
             .attributes(key("type").value("String")),
           parameterWithName("page").description("페이지 번호").optional()
             .attributes(key("type").value("Number")),
@@ -253,6 +271,7 @@ public class FeedControllerDocTest {
           fieldWithPath("[].authorIconImageUrl").type(JsonFieldType.STRING).description("작성자 아이콘 이미지 주소").optional(),
           fieldWithPath("[].title").type(JsonFieldType.STRING).description("피드 제목"),
           fieldWithPath("[].contents").type(JsonFieldType.STRING).description("피드 내용"),
+          fieldWithPath("[].category").type(JsonFieldType.STRING).description("피드 카테고리"),
           fieldWithPath("[].imageUrls").type(JsonFieldType.ARRAY).description("이미지 주소 목록"),
           fieldWithPath("[].countOfLikes").type(JsonFieldType.NUMBER).description("피드 좋아요 수"),
           fieldWithPath("[].countOfComments").type(JsonFieldType.NUMBER).description("피드 댓글 수"),
@@ -268,6 +287,7 @@ public class FeedControllerDocTest {
     //given
     User user = User.builder()
       .name("따니엘")
+      .publicNickname("따니엘")
       .email("artinfokorea2022@gmail.com")
       .password("a123456!")
       .build();
@@ -284,6 +304,7 @@ public class FeedControllerDocTest {
       .artistId(artist.getId())
       .userId(user.getId())
       .title("제목")
+      .category(FeedCategory.CHOIR)
       .contents("내용")
       .imageUrls(List.of("test.sample_image_url.com"))
       .build();
@@ -304,6 +325,7 @@ public class FeedControllerDocTest {
           fieldWithPath("artistId").type(JsonFieldType.NUMBER).description("아티스트 ID"),
           fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
           fieldWithPath("contents").type(JsonFieldType.STRING).description("피드 내용"),
+          fieldWithPath("category").type(JsonFieldType.STRING).description("피드 카테고리 [ ARTIST, CHOIR, ORCHESTRA ]"),
           fieldWithPath("imageUrls").type(JsonFieldType.ARRAY).description("이미지 주소 목록")
         )
       ));

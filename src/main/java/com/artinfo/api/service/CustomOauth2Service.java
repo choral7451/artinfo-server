@@ -51,14 +51,14 @@ public class CustomOauth2Service extends DefaultOAuth2UserService {
 
     Optional<User> user = userRepository.findByEmail(email);
 
-    if (user.isEmpty()) {
-      User UserEntity = User.builder()
-        .email(email)
-        .name(name)
-        .authType(auth)
-        .build();
-      userRepository.save(UserEntity);
-    }
+//    if (user.isEmpty()) {
+//      User UserEntity = User.builder()
+//        .email(email)
+//        .name(name)
+//        .authType(auth)
+//        .build();
+//      userRepository.save(UserEntity);
+//    }
 
     return new CustomOAuth2User(oAuth2User, email);
   }

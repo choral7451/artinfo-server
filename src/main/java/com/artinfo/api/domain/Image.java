@@ -18,6 +18,9 @@ public class Image {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "title")
+  private String title;
+
   @Column(name = "url", columnDefinition = "text")
   private String url;
 
@@ -25,13 +28,19 @@ public class Image {
   @JoinColumn(name = "feed_id")
   private Feed feed;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "company_certification_id")
+  private CompanyCertification companyCertification;
+
   @CreatedDate
   @Column(name = "created_at", columnDefinition = "timestamp with time zone not null")
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  public Image(String url, Feed feed) {
-    this.url =url;
+  public Image(String title, String url, Feed feed, CompanyCertification certification) {
+    this.title = title;
+    this.url = url;
     this.feed = feed;
+    this.companyCertification = certification;
   }
 }
