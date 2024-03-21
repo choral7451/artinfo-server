@@ -1,5 +1,12 @@
 FROM openjdk:17-oracle
 
-COPY build/libs/artinfo-server-1.1.0.jar /artinfo-server.jar
+CMD ["./gradlew", "clean", "build"]
+VOLUME /tmp
 
-ENTRYPOINT ["java","-jar","/artinfo-server.jar"]
+ARG JAR_FILE=build/libs/*.jar
+
+COPY ${JAR_FILE} app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","/app.jar"]
