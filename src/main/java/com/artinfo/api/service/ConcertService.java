@@ -5,6 +5,7 @@ import com.artinfo.api.domain.User;
 import com.artinfo.api.domain.concert.Concert;
 import com.artinfo.api.domain.concert.ConcertKeyword;
 import com.artinfo.api.exception.ArtistNotFound;
+import com.artinfo.api.exception.ConcertNotFound;
 import com.artinfo.api.exception.UserNotFound;
 import com.artinfo.api.repository.artist.ArtistRepository;
 import com.artinfo.api.repository.concert.ConcertKeywordRepository;
@@ -14,6 +15,7 @@ import com.artinfo.api.request.concert.ConcertCreate;
 import com.artinfo.api.request.concert.ConcertKeywordSearch;
 import com.artinfo.api.request.concert.ConcertSearch;
 import com.artinfo.api.response.concert.ArtistConcertResponse;
+import com.artinfo.api.response.concert.ConcertDetailResponse;
 import com.artinfo.api.response.concert.ConcertResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,22 @@ public class ConcertService {
   private final ConcertRepository concertRepository;
   private final UserRepository userRepository;
   private final ConcertKeywordRepository concertKeywordRepository;
+
+  public ConcertDetailResponse get(Long concertId) {
+    Concert concert = concertRepository.findById(concertId)
+      .orElseThrow(ConcertNotFound::new);
+
+    return ConcertDetailResponse.builder()
+      .id(concert.getId())
+      .authorId(concert.getUser().getId())
+      .authorEmail(concert.getUser().getEmail())
+      .authorPublicNickName(concert.getUser().getName())
+      .title(concert.getTitle())
+      .contents(concert.getContents())
+      .linkUrl(concert.getLinkUrl())
+      .performanceTime(concert.getPerformanceTime())
+      .build();
+  }
 
   @Transactional
   public void create(ConcertCreate concertCreate) {

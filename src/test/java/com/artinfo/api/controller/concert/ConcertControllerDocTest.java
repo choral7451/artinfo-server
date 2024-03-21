@@ -79,6 +79,55 @@ public class ConcertControllerDocTest {
   }
 
   @Test
+  @DisplayName("공연 단건 조회")
+  void getLesson() throws Exception {
+    //given
+    User user = User.builder()
+      .name("따니엘")
+      .email("artinfokorea2022@gmail.com")
+      .password("a123456!")
+      .build();
+    userRepository.save(user);
+
+    Concert concert = Concert.builder()
+      .title("제목")
+      .contents("내용")
+      .posterUrl("test.sample-image-url.com")
+      .category(ConcertCategory.ENSEMBLE)
+      .location("롯데콘서트홀")
+      .user(user)
+      .isActive(true)
+      .performanceTime(LocalDateTime.now())
+      .linkUrl("www.tes-url.com")
+      .build();
+    concertRepository.save(concert);
+
+    //expected
+    this.mockMvc.perform(RestDocumentationRequestBuilders.get("/concerts/{concertId}", concert.getId())
+        .accept(MediaType.APPLICATION_JSON)
+      )
+      .andExpect(status().isOk())
+      .andDo(document("get-concert",
+        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+        pathParameters(
+          parameterWithName("concertId").description("공연 아이디")
+            .attributes(key("type").value("Number"))
+        ),
+        responseFields(
+          fieldWithPath("id").type(JsonFieldType.NUMBER).description("공연 아이디"),
+          fieldWithPath("authorId").type(JsonFieldType.STRING).description("작성자 아이디"),
+          fieldWithPath("authorEmail").type(JsonFieldType.STRING).description("작성자 이메일"),
+          fieldWithPath("authorPublicNickName").type(JsonFieldType.STRING).description("작성자 공개 닉네임"),
+          fieldWithPath("title").type(JsonFieldType.STRING).description("공연 제목"),
+          fieldWithPath("contents").type(JsonFieldType.STRING).description("공연 내용"),
+          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("공연 주소 URL").optional(),
+          fieldWithPath("performanceTime").type(JsonFieldType.STRING).description("공연 시간")
+        )
+      ));
+  }
+
+  @Test
   @DisplayName("공연 생성")
   void create() throws Exception {
     //given

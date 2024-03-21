@@ -4,6 +4,7 @@ import com.artinfo.api.request.concert.ConcertCreate;
 import com.artinfo.api.request.concert.ConcertKeywordSearch;
 import com.artinfo.api.request.concert.ConcertSearch;
 import com.artinfo.api.response.concert.ArtistConcertResponse;
+import com.artinfo.api.response.concert.ConcertDetailResponse;
 import com.artinfo.api.response.concert.ConcertResponse;
 import com.artinfo.api.service.ConcertService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,11 @@ import java.util.List;
 public class ConcertController {
 
   private final ConcertService concertService;
+
+  @GetMapping("/concerts/{concertId}")
+  public ConcertDetailResponse get(@PathVariable(name = "concertId") Long concertId) {
+    return concertService.get(concertId);
+  }
 
   @PostMapping("/concerts")
   public void create(@RequestBody ConcertCreate concertCreate) {
