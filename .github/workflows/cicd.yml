@@ -27,6 +27,9 @@ jobs:
           touch ./src/main/resources/application.yml
           echo "${{ secrets.application }}" >> ./src/main/resources/application.yml
 
+          touch ./src/test/resources/application.yml
+          echo "${{ secrets.application_test }}" >> ./src/test/resources/application.yml
+
       - name: Cache docker layers
         uses: actions/cache@v2
         with:
