@@ -1,9 +1,12 @@
+FROM openjdk:17-oracle AS builder
+
+WORKDIR /app
+COPY . .
+RUN ./gradlew clean build
+
 FROM openjdk:17-oracle
-
-CMD ["./gradlew", "clean", "build"]
-
-COPY build/libs/*.jar app.jar
+WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
-
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
