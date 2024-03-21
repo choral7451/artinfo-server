@@ -119,9 +119,14 @@ public class ConcertControllerDocTest {
           fieldWithPath("authorId").type(JsonFieldType.STRING).description("작성자 아이디"),
           fieldWithPath("authorEmail").type(JsonFieldType.STRING).description("작성자 이메일"),
           fieldWithPath("authorPublicNickName").type(JsonFieldType.STRING).description("작성자 공개 닉네임"),
+          fieldWithPath("authorIconImageUrl").type(JsonFieldType.STRING).description("작성자 아이콘 이미지 주소").optional(),
           fieldWithPath("title").type(JsonFieldType.STRING).description("공연 제목"),
           fieldWithPath("contents").type(JsonFieldType.STRING).description("공연 내용"),
-          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("공연 주소 URL").optional(),
+          fieldWithPath("location").type(JsonFieldType.STRING).description("공연 장소"),
+          fieldWithPath("isActive").type(JsonFieldType.BOOLEAN).description("활성화 상태"),
+          fieldWithPath("category").type(JsonFieldType.STRING).description("공연 카테고리"),
+          fieldWithPath("linkUrl").type(JsonFieldType.STRING).description("공연 주소").optional(),
+          fieldWithPath("posterUrl").type(JsonFieldType.STRING).description("공연 이미지 주소").optional(),
           fieldWithPath("performanceTime").type(JsonFieldType.STRING).description("공연 시간")
         )
       ));

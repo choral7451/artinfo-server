@@ -46,9 +46,14 @@ public class ConcertService {
       .authorId(concert.getUser().getId())
       .authorEmail(concert.getUser().getEmail())
       .authorPublicNickName(concert.getUser().getName())
+      .authorIconImageUrl(concert.getUser().getIconImageUrl())
       .title(concert.getTitle())
       .contents(concert.getContents())
       .linkUrl(concert.getLinkUrl())
+      .posterUrl(concert.getPosterUrl())
+      .location(concert.getLocation())
+      .isActive(concert.getIsActive())
+      .category(concert.getCategory())
       .performanceTime(concert.getPerformanceTime())
       .build();
   }
