@@ -46,10 +46,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: Build and push
-        id: docker_build
+      - name: build docker
+        run: ./gradlew bootBuildImage --imageName=${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
+
+      - name: Push Docker image to Docker Hub
         uses: docker/build-push-action@v2
         with:
+          context: .
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
