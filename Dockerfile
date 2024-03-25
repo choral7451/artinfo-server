@@ -13,9 +13,9 @@ FROM openjdk:17-oracle AS builder
 #ENV PATH=$PATH:$GRADLE_HOME/bin
 #RUN gradle --version
 #
-#WORKDIR /app
-#COPY . .
-#RUN ./gradlew clean build
+WORKDIR /app
+COPY . .
+RUN ./gradlew clean build
 
 FROM openjdk:17-oracle
 WORKDIR /app
