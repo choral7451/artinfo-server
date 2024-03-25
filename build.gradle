@@ -63,7 +63,7 @@ dependencies {
 	// google vision
 	implementation group: 'com.google.cloud', name: 'google-cloud-vision', version: '3.30.0'
 
-	runtimeOnly 'com.h2database:h2'
+	testImplementation group: 'com.h2database', name: 'h2', version: '2.1.214'
 }
 
 test {

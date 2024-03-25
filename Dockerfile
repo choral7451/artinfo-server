@@ -19,7 +19,7 @@ FROM openjdk:17-oracle AS builder
 
 FROM openjdk:17-oracle
 WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/artinfo-server-1.1.0.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
